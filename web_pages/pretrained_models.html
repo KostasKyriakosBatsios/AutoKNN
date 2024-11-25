@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pretrain model | AutoKNN</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="../source/css/services.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-sm fixed-top bg-dark navbar-dark">
+            <div class="container-fluid">
+                <!-- Name of web app: AutoKNN -->
+                <a class="navbar-brand" href="../index.html">AutoKNN</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Main navigation (Home, About, dropdown Services, Rate) -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <!-- Home page -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">
+                                <ion-icon name="home-outline"></ion-icon><span>Home</span>
+                            </a>
+                        </li>
+                        <!-- About page -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./about.html">
+                                <i><ion-icon name="help-circle-outline"></ion-icon></i><span>About</span>
+                            </a>
+                        </li>
+                        <!-- Dropdown menu of our app -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                                <i><ion-icon name="laptop-outline"></ion-icon></i><span>Services</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- New model -->
+                                <li>
+                                    <a class="dropdown-item" href="./new_model.html">
+                                        <i><ion-icon name="duplicate-outline"></ion-icon></i><span>Create a model</span>
+                                    </a>
+                                </li>
+                                <!-- Pretrained models -->
+                                <li>
+                                    <a class="dropdown-item active" href="#">
+                                        <i><ion-icon name="eye-outline"></ion-icon></i><span>Pretrained Models</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Rate -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://forms.gle/yobQyc7v4heNRV7z9" target="_blank">
+                                <i><ion-icon name="thumbs-up-outline"></ion-icon></i><span>Rate</span>
+                            </a>
+                        </li>    
+                    </ul>
+                    <!-- Account navigation (Login, Register, dropdown Profile) -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Login button -->
+                        <li class="nav-item" id="loginBtn">
+                            <a class="nav-link" href="./login.html">
+                                <i><ion-icon name="log-in-outline"></ion-icon></i><span>Login</span>
+                            </a>
+                        </li>
+                        <!-- Register button -->
+                        <li class="nav-item" id="registerBtn">
+                            <a class="nav-link" href="./register.html">
+                                <i><ion-icon name="create-outline"></ion-icon></i><span>Register</span>
+                            </a>
+                        </li>
+                        <!-- Profile dropdown -->
+                        <li class="nav-item dropdown" id="profileNav">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <ion-icon name="person-circle-outline"></ion-icon><span>Profile</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <!-- Username display -->
+                                <li class="dropdown-item-text">
+                                    <strong id="username"></strong>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Settings dropdown -->
+                                <li class="nav-item dropdown dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">
+                                        <i><ion-icon name="create-outline"></ion-icon></i><span>Settings</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <!-- Edit the name and the password -->
+                                        <li>
+                                            <a class="dropdown-item" href="./edit_name_password.html">
+                                                <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Edit name and password</span>
+                                            </a>
+                                        </li>
+                                        <!-- Edit the email -->
+                                        <li>
+                                            <a class="dropdown-item" href="./edit_email.html">
+                                                <i><ion-icon name="mail-outline"></ion-icon></i><span>Edit Email</span>
+                                            </a>
+                                        </li>
+                                        <!-- Delete the account -->
+                                        <li>
+                                            <a class="dropdown-item" href="./delete_account.html">
+                                                <i><ion-icon name="trash-outline"></ion-icon></i><span>Delete Account</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- API documents -->
+                                <li>
+                                    <a class="dropdown-item" href="./api_documents.html">
+                                        <i><ion-icon name="document-attach-outline"></ion-icon></i><span>API Docoments</span>
+                                    </a>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Logout -->
+                                <li>
+                                    <a class="dropdown-item" href="#" id="logoutBtn">
+                                        <ion-icon name="log-out-outline"></ion-icon><span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>                     
+                </div>
+            </div>
+        </nav>
+
+        <!-- downloading and deleting a builded model -->
+        <div id="pretrainedModel">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+                <!-- Alert -->
+                <div class="container mt-1" id="alertModels"></div>
+                <h1>Pretrained models</h1>
+                <!-- Select pretrained models -->
+                <div class="sub-box">
+                    <h2>Select a pretrained model</h2>
+                    <!-- Select an existing model -->
+                    <select id="selectModel" class="form-select" aria-label="Choose an existing model"></select>
+                    <!-- Download and delete buttons -->
+                    <div class="margin-top d-grid d-flex justify-content-between">
+                        <!-- Download -->
+                        <div id="dnloadSelectedModel">
+                            <!-- Download button -->
+                            <button class="btn btn-primary btn-lg" type="button" id="dnloadBtn" disabled="">
+                                <i><ion-icon name="download-outline"></ion-icon></i><span>Download</span>
+                            </button>
+                            <!-- Loading button -->
+                            <div class="d-grid margin-top">
+                                <button class="btn btn-primary btn-lg" id="loadDnloadBtn" disabled>
+                                    <span class="spinner-grow spinner-grow-sm"></span>
+                                    Loading..
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Delete -->
+                        <div id="delSelectedModel">
+                            <!-- Delete button -->
+                            <button class="btn btn-danger btn-lg" type="button" id="delBtn" data-bs-toggle="modal" data-bs-target="#delModal" disabled="">
+                                <i><ion-icon name="trash-outline"></ion-icon></i><span>Delete</span>
+                            </button>
+                            <!-- Loading button -->
+                            <div class="d-grid margin-top">
+                                <button class="btn btn-danger btn-lg" id="loadDelBtn" disabled>
+                                    <span class="spinner-grow spinner-grow-sm"></span>
+                                    Loading..
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Loading button -->
+                    <div class="d-grid margin-top">
+                        <button class="btn btn-primary btn-lg" id="loadSelectedModelBtn" disabled>
+                            <span class="spinner-grow spinner-grow-sm"></span>
+                            Loading..
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal, when the delete model button is pressed -->
+        <div class="modal fade" id="delModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Notification: delete model</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <!-- Alert -->
+                        <div class="container mt-1" id="alertDelModal"></div>
+                        <p>Are you sure you want to delete this model? This action cannot be undone!</p>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!-- Delete button -->
+                        <button type="button" id="delModelBtn" class="btn btn-danger">Delete</button>
+                        <!-- Loading button -->
+                        <button class="btn btn-danger" id="loadDelModelBtn" disabled>
+                            <span class="spinner-grow spinner-grow-sm"></span>
+                            Loading..
+                        </button>
+                        <!-- Close button -->
+                        <button type="button" id="closeDelModalBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inserted parameters -->
+        <div id="parametersSelected">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+                <!-- Alert -->
+                <div class="container mt-1" id="alertPreviewParams"></div>
+                <h1>Inserted parameters</h1>
+                <div class="sub-box">
+                    <h2>Features</h2>
+                    <!-- Info -->
+                    <div class="margin-top">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="Features that have been selected when the model was built.">Selected feaures </button>
+                    </div>
+                    <!-- Individual features -->
+                    <form action="#" id="individualFeatures"></form>
+                </div>
+                <div class="sub-box">
+                    <h2>Class field</h2>
+                    <!-- Info -->
+                    <div class="margin-top">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="Class field that has been selected when the model was built.">Selected class field: </button>
+                    </div>
+                    <!-- Select class -->
+                    <select id="selectClass" class="form-select" aria-label="Choose an available class" disabled></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Uploading, choosing, downloading and deleting an unclassified dataset -->
+        <div id="dtUnclassified">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+                <!-- Alert -->
+                <div class="container mt-1" id="alertUnclassifiedDatasets"></div>
+                <h1>Unclassified datasets</h1>
+                <!-- Upload -->
+                <div class="sub-box">
+                    <h2>Upload an unclassified dataset</h2>
+                    <!-- Upload button -->
+                    <div class="d-grid">
+                        <button type="button" id="uploadBtn" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#uploadUnclassifiedModal">
+                            <i><ion-icon name="add-circle-outline"></ion-icon></i><span>Upload</span>
+                        </button>
+                    </div>
+                    <!-- Loading button -->
+                    <div class="d-grid margin-top">
+                        <button class="btn btn-primary btn-lg" id="loadUploadUnclassifiedDatasetBtn" disabled>
+                            <span class="spinner-grow spinner-grow-sm"></span>
+                            Loading..
+                        </button>
+                    </div>
+                </div>
+                <!-- Select an existing dataset -->
+                <div class="sub-box">
+                    <h2>Select an unclassified dataset</h2>
+                    <select id="selectUnclassifiedDataset" class="form-select" aria-label="Choose an existing unclassified dataset"></select>
+                    <!-- Download and delete buttons -->
+                    <div class="margin-top d-grid d-flex justify-content-between">
+                        <!-- Download -->
+                        <div>
+                            <!-- Download button -->
+                            <button class="btn btn-primary btn-lg" type="button" id="dnloadUnclassifiedBtn" disabled="">
+                                <i><ion-icon name="download-outline"></ion-icon></i><span>Download</span>
+                            </button>
+                            <!-- Loading button -->
+                            <div class="d-grid margin-top">
+                                <button class="btn btn-primary btn-lg" id="loadDnloadUnclassifiedBtn" disabled>
+                                    <span class="spinner-grow spinner-grow-sm"></span>
+                                    Loading..
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Delete -->
+                        <div>
+                            <!-- Delete button -->
+                            <button class="btn btn-danger btn-lg" type="button" id="delUnclassifiedBtn" data-bs-toggle="modal" data-bs-target="#delUnclassifiedModal" disabled>
+                                <i><ion-icon name="trash-outline"></ion-icon></i><span>Delete</span>
+                             </button>
+                            <!-- Loading button -->
+                            <div class="d-grid margin-top">
+                                <button class="btn btn-danger btn-lg" id="loadDelUnclassifiedBtn" disabled>
+                                    <span class="spinner-grow spinner-grow-sm"></span>
+                                    Loading..
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Loading button -->
+                    <div class="d-grid margin-top">
+                        <button class="btn btn-primary btn-lg" id="loadUnclassifiedDatasetBtn" disabled>
+                            <span class="spinner-grow spinner-grow-sm"></span>
+                            Loading..
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal, when the upload unclassified dataset button is pressed -->
+        <div class="modal fade" id="uploadUnclassifiedModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Upload a new unclassified dataset</h4>
+                        <button type="button" class="btn-close" id="closeXBtn" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <!-- Alert -->
+                        <div class="container mt-1" id="alertUploadUnclassifiedModal">
+                        </div>
+                        <!-- Upload a file -->
+                        <div class="mb-3">
+                            <label class="form-label" for="inputGroupFile">Select only <mark>.csv</mark> files with size 10MB maximum. <br></label>
+                            <input type="file" class="form-control" id="inputGroupFile">
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!-- Upload button -->
+                        <button type="button" class="btn btn-primary" id="uploadUnclassifiedBtn">Upload</button>
+                        <!-- Loading button -->
+                        <button class="btn btn-primary" id="loadUploadingUnclassifiedDatasetBtn" disabled>
+                            <span class="spinner-grow spinner-grow-sm"></span>
+                            Loading..
+                        </button>
+                        <!-- Close button -->
+                        <button type="button" id="closeUploadUnclassifiedModalBtn" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal, when the delete unclassified dataset button is pressed -->
+        <div class="modal fade" id="delUnclassifiedModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Notification: delete dataset</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <!-- Alert -->
+                        <div class="container mt-1" id="alertDelUnclassifiedModal"></div>
+                        <p>Are you sure you want to delete this dataset? This action cannot be undone!</p>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!-- Delete button -->
+                        <button type="button" id="delUnclassifiedDtBtn" class="btn btn-danger">Delete</button>
+                        <!-- Loading button -->
+                        <button class="btn btn-danger" id="loadDelUnclassifiedDtBtn" disabled>
+                            <span class="spinner-grow spinner-grow-sm"></span>
+                            Loading..
+                        </button>
+                        <!-- Close button -->
+                        <button type="button" id="closeDelUnclassifiedModalBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table for a preview of selected unclassified dataset -->
+        <div id="tableUnclassifiedDt">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+                <h1>Preview of selected unclassified dataset</h1>
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table id="dtUnclassifiedTable" class="table table-bordered">
+                        <thead>
+                            <tr id="dataUnclassifiedFeaturesNamesTHead"></tr>
+                        </thead>
+                        <tbody id="dataUnclassifiedFeaturesNamesTBody"></tbody>
+                    </table>
+                </div>
+                <!-- Info about the preview -->
+                <div class="margin-top">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#info">Click me for more info</button>
+                    <div id="info" class="collapse">
+                        <i><ion-icon name="information-circle-outline"></ion-icon></i><span>This preview contains only the first 10 rows of the selected dataset</span>
+                    </div>
+                </div>
+                <!-- Classify data button -->
+                <div class="d-grid  margin-top">
+                    <button type="button" class="btn btn-primary btn-lg" id="classifyDataBtn">
+                        <ion-icon name="build-outline"></ion-icon><span>Classify dataset</span>
+                    </button>
+                </div>
+                <!-- Loading button -->
+                <div class="d-grid margin-top">
+                    <button class="btn btn-primary btn-lg" id="loadClassifyDtBtn" disabled>
+                        <span class="spinner-grow spinner-grow-sm"></span>
+                        Loading..
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model evaluation -->
+        <div id="classifiedDt">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+                <!-- Alert -->
+                <div class="container mt-1" id="alertExport"></div>
+                <h1>Classified dataset</h1>
+                <!-- Classified table -->
+                <div class="table-responsive">
+                    <table id="dtNormalClassifiedTable" class="table table-bordered">
+                        <thead>
+                            <tr id="dataNormalClassifiedFeaturesNamesTHead"></tr>
+                        </thead>
+                        <tbody id="dataNormalClassifiedFeaturesNamesTBody"></tbody>
+                    </table>
+                </div>
+                <!-- Info about the preview -->
+                <div class="margin-top">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#info3">Click me for more info</button>
+                    <div id="info3" class="collapse">
+                        <i><ion-icon name="information-circle-outline"></ion-icon></i><span>This preview contains only the first 10 rows of the selected dataset. Press the <i><mark>Export</mark></i> button below to see the whole dataset</span>
+                    </div>
+                </div>
+                <!-- Show metrics button -->
+                <div class="d-grid d-flex  margin-top">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#firstTable">
+                        <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Show the metrics/class</span>
+                    </button>
+                </div>
+                <!-- Metrics per class table -->
+                <div id="firstTable" class="table-responsive collapse margin-top">
+                    <table id="metricsTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Metrics/Class</th>
+                            </tr>
+                            <tr>
+                                <th>Class</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F-Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsMetricsTBody"></tbody>
+                    </table>
+                </div>
+                <!-- Show average metrics button -->
+                <div class="d-grid d-flex  margin-top">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#secondTable">
+                        <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Show the average metrics</span>
+                    </button>
+                </div>
+                <!-- Average Metrics table -->
+                <div id="secondTable" class="table-responsive collapse margin-top">
+                    <table id="avgMetricsTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="4">Average Metrics</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">Accuracy</th>
+                                <th scope="col">Precision</th>
+                                <th scope="col">Recall</th>
+                                <th scope="col">F-Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsAvgMetricsTBody"></tbody>
+                    </table>
+                </div>
+                <!-- Download to .csv button -->
+                <div class="d-grid  margin-top">
+                    <button class="btn btn-primary btn-lg" type="button" id="exportBtn">
+                        <i><ion-icon name="bookmark-outline"></ion-icon></i><span>Export to .csv</span>
+                    </button>
+                </div>
+                <!-- Loading button -->
+                <div class="d-grid margin-top">
+                    <button class="btn btn-primary btn-lg" id="loadExportBtn" disabled>
+                        <span class="spinner-grow spinner-grow-sm"></span>
+                        Loading..
+                    </button>
+                </div>     
+            </div>
+        </div>
+
+        <!-- jQuery, Popper, Bootstrap JS, JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../source/js/pretrained_models.js"></script>
+
+        <!-- ionicons -->
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+</html>

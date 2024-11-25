@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>API Documents | AutoKNN</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="../source/css/profile_dropdown_pages.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-sm fixed-top bg-dark navbar-dark">
+            <div class="container-fluid">
+                <!-- Name of web app: AutoKNN -->
+                <a class="navbar-brand" href="../index.html">AutoKNN</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Main navigation (Home, About, dropdown Services, Rate) -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <!-- Home page -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">
+                                <ion-icon name="home-outline"></ion-icon><span>Home</span>
+                            </a>
+                        </li>
+                        <!-- About page -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./about.html">
+                                <i><ion-icon name="help-circle-outline"></ion-icon></i><span>About</span>
+                            </a>
+                        </li>
+                        <!-- Dropdown menu of our app -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i><ion-icon name="laptop-outline"></ion-icon></i><span>Services</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- New model -->
+                                <li>
+                                    <a class="dropdown-item" href="./new_model.html">
+                                        <i><ion-icon name="duplicate-outline"></ion-icon></i><span>Create a model</span>
+                                    </a>
+                                </li>
+                                <!-- Pretrain model -->
+                                <li>
+                                    <a class="dropdown-item" href="./pretrained_models.html">
+                                        <i><ion-icon name="eye-outline"></ion-icon></i><span>Pretrained Models</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Rate -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://forms.gle/yobQyc7v4heNRV7z9" target="_blank">
+                                <i><ion-icon name="thumbs-up-outline"></ion-icon></i><span>Rate</span>
+                            </a>
+                        </li>    
+                    </ul>
+                    <!-- Account navigation (Login, Register, dropdown Profile) -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Login button -->
+                        <li class="nav-item" id="loginBtn">
+                            <a class="nav-link" href="./login.html">
+                                <i><ion-icon name="log-in-outline"></ion-icon></i><span>Login</span>
+                            </a>
+                        </li>
+                        <!-- Register button -->
+                        <li class="nav-item" id="registerBtn">
+                            <a class="nav-link" href="./register.html">
+                                <i><ion-icon name="create-outline"></ion-icon></i><span>Register</span>
+                            </a>
+                        </li>
+                        <!-- Profile dropdown -->
+                        <li class="nav-item dropdown" id="profileNav">
+                            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                                <ion-icon name="person-circle-outline"></ion-icon><span>Profile</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <!-- Username display -->
+                                <li class="dropdown-item-text">
+                                    <strong id="username"></strong>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Settings dropdown -->
+                                <li class="nav-item dropdown dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">
+                                        <i><ion-icon name="create-outline"></ion-icon></i><span>Settings</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <!-- Edit the name and the password -->
+                                        <li>
+                                            <a class="dropdown-item" href="./edit_name_password.html">
+                                                <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Edit name and password</span>
+                                            </a>
+                                        </li>
+                                        <!-- Edit the email -->
+                                        <li>
+                                            <a class="dropdown-item" href="./edit_email.html">
+                                                <i><ion-icon name="mail-outline"></ion-icon></i><span>Edit Email</span>
+                                            </a>
+                                        </li>
+                                        <!-- Delete the account -->
+                                        <li>
+                                            <a class="dropdown-item" href="./delete_account.html">
+                                                <i><ion-icon name="trash-outline"></ion-icon></i><span>Delete Account</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- API documents -->
+                                <li>
+                                    <a class="dropdown-item active" href="#">
+                                        <i><ion-icon name="document-attach-outline"></ion-icon></i><span>API Docoments</span>
+                                    </a>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Logout -->
+                                <li>
+                                    <a class="dropdown-item" href="#" id="logoutBtn">
+                                        <ion-icon name="log-out-outline"></ion-icon><span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>                     
+                </div>
+            </div>
+        </nav>
+
+        <!-- Inserted parameters -->
+        <div id="apiDocs">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+                <h1>API Documents of AutoKNN application</h1>
+                <!-- User's token -->
+                <div class="sub-box">
+                    <h2>Your personal token</h2>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="token">
+                        <button class="btn btn-primary" type="button" id="copyToken">
+                            <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Copy</span>
+                        </button>
+                    </div>    
+                </div>
+                <!-- API Endpoints -->
+                <div class="sub-box">
+                    <h2>API Endpoints of AutoKNN</h2>
+
+                    <div class="accordion" id="apiAccordion">
+                        <!-- Users Section -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingUsers">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersCollapse" aria-expanded="false" aria-controls="usersCollapse">
+                                    <i><ion-icon name="person-outline"></ion-icon></i><span>User</span>
+                                </button>
+                            </h2>
+                            <div id="usersCollapse" class="accordion-collapse collapse" aria-labelledby="headingUsers" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                        POST: /server/php/api/register.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "fname": "first_name",
+    "lname": "last_name",
+    "email": "registered_email@example.com",
+    "password": "registered_password",
+    "confirmPassword": "registered_password"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Registration successful. Verification email sent."}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loginCollapse" aria-expanded="false" aria-controls="loginCollapse">
+                                        POST: /server/php/api/login.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="loginCollapse" class="accordion-collapse collapse" aria-labelledby="loginCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to login in the application. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "email": "your_email@example.com",
+    "password": "your_password"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success",
+    "token": "your_token",
+    "fname": "your_first_name",
+    "lname": "your_last_name",
+    "allowPublic": "permission_for_uploading_datasets_publicly"
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#editNamePassCollapse" aria-expanded="false" aria-controls="editNamePassCollapse">
+                                        POST: /server/php/api/edit_name_password.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="editNamePassCollapse" class="accordion-collapse collapse" aria-labelledby="editNamePassCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to edit either the username (first and/or last name), or the password, or both of the user. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "firstName": "your_first_name" ?? null,
+    "lastName": "your_last_name" ?? null,
+    "currentPassword": "your_password" ?? null,
+    "newPassword": "your_new_password" ?? null,
+    "confirmPassword": "your_new_password" ?? null
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "User details updated successfully"}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#editEmailCollapse" aria-expanded="false" aria-controls="editEmailCollapse">
+                                        POST: /server/php/api/edit_email.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="editEmailCollapse" class="accordion-collapse collapse" aria-labelledby="editEmailCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to edit the email of the user. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "email": "new_email@example.com"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Change of email was successful."}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delAccCollapse" aria-expanded="false" aria-controls="delAccCollapse">
+                                        DELETE: /server/php/api/delete_account.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="delAccCollapse" class="accordion-collapse collapse" aria-labelledby="delAccCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to delete the account of the user. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "email": "your_email@example.com",
+    "password": "your_password",
+    "confirmPassword": "your_password",
+    "token": "your_token"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Account deleted successfully"}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Datasets Section -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDatasets">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#datasetsCollapse" aria-expanded="false" aria-controls="datasetsCollapse">
+                                    <i><ion-icon name="file-tray-full-outline"></ion-icon></i><span>Datasets</span>
+                                </button>
+                            </h2>
+                            <div id="datasetsCollapse" class="accordion-collapse collapse" aria-labelledby="headingDatasets" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#listDtCollapse" aria-expanded="false" aria-controls="listDtCollapse">
+                                        GET: /server/php/api/list_datasets.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="listDtCollapse" class="accordion-collapse collapse" aria-labelledby="listDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to list all the available datasets. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "public": ["public_dataset_1.csv",""public_dataset_2.csv"],
+    "private": ["private_dataset_1.csv",""private_dataset_2.csv"]
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#uploadDtCollapse" aria-expanded="false" aria-controls="uploadDtCollapse">
+                                        POST: /server/php/api/upload_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="uploadDtCollapse" class="accordion-collapse collapse" aria-labelledby="uploadDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to upload a new dataset. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "folder": "selected_uploading_folder",
+    "allowPublic": "permission_for_uploading_datasets_publicly",
+    "file": "uploaded_dataset.csv",
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "File uploaded successfully.", "file": "uploaded_dataset.csv"]}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loadDtCollapse" aria-expanded="false" aria-controls="loadDtCollapse">
+                                        GET: /server/php/api/load_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="loadDtCollapse" class="accordion-collapse collapse" aria-labelledby="loadDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to load the dataset that the user has selected. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "folder": "folder_of_selected_dataset",
+    "file": "selected_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success",
+    "header": [
+        "sepal.length",
+        "sepal.width",
+        "petal.length",
+        "petal.width",
+        "variety"
+    ],
+    "data": [
+        [
+            "5.1",
+            "3.5",
+            "1.4",
+            ".2",
+            "Setosa"
+        ],
+        [
+            "4.9",
+            "3",
+            "1.4",
+            ".2",
+            "Setosa"
+        ],
+        [
+            "4.7",
+            "3.2",
+            "1.3",
+            ".2",
+            "Setosa"
+        ],
+        ...
+    ]  
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadDtCollapse" aria-expanded="false" aria-controls="dnloadDtCollapse">
+                                        GET: /server/php/api/download_dataset.php?token={token}&file={file}
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="dnloadDtCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to download the selected dataset. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "selected_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Download was successful."}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delDtCollapse" aria-expanded="false" aria-controls="delDtCollapse">
+                                        DELETE: /server/php/api/delete_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="delDtCollapse" class="accordion-collapse collapse" aria-labelledby="delDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to delete the selected dataset. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "folder": "folder_of_selected_dataset",
+    "file": "selected_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Successfully deleted the 'selected_dataset.csv' dataset from 'folder_of_selected_dataset' folder"}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#listUnclDtCollapse" aria-expanded="false" aria-controls="listUnclDtCollapse">
+                                        GET: /server/php/api/list_unclassified_datasets.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="listUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="listUnclDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to list all the available unclassified datasets. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success", 
+    "unclassifiedDatasets": ["unclassified_dataset1.csv","unclassified_dataset2.csv"]
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#uploadUnclDtCollapse" aria-expanded="false" aria-controls="uploadUnclDtCollapse">
+                                        POST: /server/php/api/upload_unclassified_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="uploadUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="uploadUnclDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to upload a new (preferably unclassified) dataset that matches the one used to create the selected model. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "uploaded_dataset.csv",
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "File uploaded successfully.", "file": 'uploaded_dataset.csv'}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loadUnclDtCollapse" aria-expanded="false" aria-controls="loadUnclDtCollapse">
+                                        GET: /server/php/api/load_unclassified_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="loadUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="loadUnclDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to load the unclassified dataset that the user has selected. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "selected_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success",
+    "header": [
+        "sepal.length",
+        "sepal.width",
+        "petal.length",
+        "petal.width",
+        "variety"
+    ],
+    "data": [
+        [
+            "5.1",
+            "3.5",
+            "1.4",
+            ".2",
+            "Setosa"
+        ],
+        [
+            "4.9",
+            "3",
+            "1.4",
+            ".2",
+            "Setosa"
+        ],
+        [
+            "4.7",
+            "3.2",
+            "1.3",
+            ".2",
+            "Setosa"
+        ],
+        ...
+    ]  
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                        GET: /server/php/api/download_unclassified_dataset.php?token={token}&file={file}
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to download the selected unclassified dataset. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "selected_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Download was successful."}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delUnclDtCollapse" aria-expanded="false" aria-controls="delUnclDtCollapse">
+                                        DELETE: /server/php/api/delete_unclassified_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="delUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="delUnclDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to delete the selected unclassified dataset. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "selected_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "'selected_dataset.csv' dataset deleted successfully"}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loadClDtCollapse" aria-expanded="false" aria-controls="loadClDtCollapse">
+                                        GET: /server/php/api/load_classified_dataset.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="loadClDtCollapse" class="accordion-collapse collapse" aria-labelledby="loadClDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to load the classified dataset (from the selected unclassified into classified). Also, if the user uploads a dataset that has the class column, it'll display the class and the one that got predicted and also below the table the metrics per class and the average metrics. Else, only the one that got predicted. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "classified_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success",
+    "header": [
+        "sepal.length",
+        "sepal.width",
+        "petal.length",
+        "petal.width",
+        "variety",
+        "predicted"
+    ],
+    "data": [
+        [
+            "5.1",
+            "3.5",
+            "1.4",
+            ".2",
+            "Setosa",
+            "Setosa"
+        ],
+        [
+            "4.9",
+            "3",
+            "1.4",
+            ".2",
+            "Setosa",
+            "Versicolor"
+        ],
+        [
+            "4.7",
+            "3.2",
+            "1.3",
+            ".2",
+            "Setosa",
+            "Virginica"
+        ],
+        ...
+    ]  
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadClDtCollapse" aria-expanded="false" aria-controls="dnloadClDtCollapse">
+                                        GET: /server/php/api/download_classified_dataset.php?token={token}&file={file}
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="dnloadClDtCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadClDtCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to download the classified dataset. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "file": "classified_dataset.csv"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Download was successful."}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Models Section -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingModels">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#modelsCollapse" aria-expanded="false" aria-controls="modelsCollapse">
+                                    <i><ion-icon name="tablet-landscape-outline"></ion-icon></i><span>Models</span>
+                                </button>
+                            </h2>
+                            <div id="modelsCollapse" class="accordion-collapse collapse" aria-labelledby="headingModels" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#listModCollapse" aria-expanded="false" aria-controls="listModCollapse">
+                                        GET: /server/php/api/list_models.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="listModCollapse" class="accordion-collapse collapse" aria-labelledby="listModCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to list all the built models. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success", 
+    "models": [
+        {
+            "name": "model1.pkl",
+            "path": "..\/path\/to\/model1.pkl"
+        },
+        {
+            "name": "model2.pkl",
+            "path": "..\/path\/to\/model2.pkl"
+        },
+        {
+            "name": "model2.pkl",
+            "path": "..\/path\/to\/model2.pkl"
+        }
+    ]
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#modContCollapse" aria-expanded="false" aria-controls="modContCollapse">
+                                        GET: /server/php/api/get_model_content.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="modContCollapse" class="accordion-collapse collapse" aria-labelledby="modContCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to get the contents of the model (selected features and class). Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "model": "selected_model.pkl"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{
+    "status": "success", 
+    "features": [
+        "sepal.length",
+        "sepal.width",
+        "petal.length",
+        "petal.width"
+    ],
+    "class": "variety"
+}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadModCollapse" aria-expanded="false" aria-controls="dnloadModCollapse">
+                                        GET: /server/php/api/download_model.php?token={token}&file={file}
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="dnloadModCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadModCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to download the selected model. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "model": "selected_model.pkl"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Download was successful."}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delModCollapse" aria-expanded="false" aria-controls="delModCollapse">
+                                        DELETE: /server/php/api/delete_model.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="delModCollapse" class="accordion-collapse collapse" aria-labelledby="delModCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to delete the selected model. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "token": "your_token",
+    "model": "selected_model.pkl"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{"status": "success", "message": "Model deleted successfully"}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Classification Section -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingClassification">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#classificationCollapse" aria-expanded="false" aria-controls="classificationCollapse">
+                                    <i><ion-icon name="build-outline"></ion-icon></i><span>Classification</span>
+                                </button>
+                            </h2>
+                            <div id="classificationCollapse" class="accordion-collapse collapse" aria-labelledby="headingClassification" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                        POST: /server/php/api/post_knn_train_test.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "fname": "John",
+    "lname": "Doe",
+    "email": "registeredemail@example.com",
+    "password": "password123",
+    "confirmPassword": "password123"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                        GET: /server/php/api/get_knn_train_test.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "fname": "John",
+    "lname": "Doe",
+    "email": "registeredemail@example.com",
+    "password": "password123",
+    "confirmPassword": "password123"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                        POST: /server/php/api/save_model.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "fname": "John",
+    "lname": "Doe",
+    "email": "registeredemail@example.com",
+    "password": "password123",
+    "confirmPassword": "password123"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                        POST: /server/php/api/classify_data.php
+                                        <i><ion-icon name="caret-down-outline"></ion-icon></i>
+                                    </button>
+                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                        <div class="accordion-body">
+                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <pre>
+{
+    "fname": "John",
+    "lname": "Doe",
+    "email": "registeredemail@example.com",
+    "password": "password123",
+    "confirmPassword": "password123"
+}
+                                            </pre>
+                                            <p>Example of the <strong>response body:</strong></p>
+                                            <pre>
+{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery, Popper, Bootstrap JS, JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../source/js/api_documents.js"></script>
+
+        <!-- ionicons -->
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+</html>
