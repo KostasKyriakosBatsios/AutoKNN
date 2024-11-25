@@ -507,11 +507,11 @@
                                             </pre>
                                         </div>
                                     </div>
-                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadUnclDtCollapse" aria-expanded="false" aria-controls="dnloadUnclDtCollapse">
                                         GET: /server/php/api/download_unclassified_dataset.php?token={token}&file={file}
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
-                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                    <div id="dnloadUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadUnclDtCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
                                             <p>This endpoint is used to download the selected unclassified dataset. Example of the <strong>request body:</strong> </p>
                                             <pre>
@@ -744,91 +744,75 @@
                             </h2>
                             <div id="classificationCollapse" class="accordion-collapse collapse" aria-labelledby="headingClassification" data-bs-parent="#apiAccordion">
                                 <div class="accordion-body">
-                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#postKnnCollapse" aria-expanded="false" aria-controls="postKnnCollapse">
                                         POST: /server/php/api/post_knn_train_test.php
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
-                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                    <div id="postKnnCollapse" class="accordion-collapse collapse" aria-labelledby="postKnnCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <p>... Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    "fname": "John",
-    "lname": "Doe",
-    "email": "registeredemail@example.com",
-    "password": "password123",
-    "confirmPassword": "password123"
+    ...
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+{...}
                                             </pre>
                                         </div>
                                     </div>
-                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                    <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#getKnnCollapse" aria-expanded="false" aria-controls="getKnnCollapse">
                                         GET: /server/php/api/get_knn_train_test.php
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
-                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                    <div id="getKnnCollapse" class="accordion-collapse collapse" aria-labelledby="getKnnCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <p>... Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    "fname": "John",
-    "lname": "Doe",
-    "email": "registeredemail@example.com",
-    "password": "password123",
-    "confirmPassword": "password123"
+    ...
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+{...}
                                             </pre>
                                         </div>
                                     </div>
-                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#saveModCollapse" aria-expanded="false" aria-controls="saveModCollapse">
                                         POST: /server/php/api/save_model.php
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
-                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                    <div id="saveModCollapse" class="accordion-collapse collapse" aria-labelledby="saveModCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <p>... Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    "fname": "John",
-    "lname": "Doe",
-    "email": "registeredemail@example.com",
-    "password": "password123",
-    "confirmPassword": "password123"
+    ...
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+{...}
                                             </pre>
                                         </div>
                                     </div>
-                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
+                                    <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#classifyCollapse" aria-expanded="false" aria-controls="classifyCollapse">
                                         POST: /server/php/api/classify_data.php
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
-                                    <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
+                                    <div id="classifyCollapse" class="accordion-collapse collapse" aria-labelledby="classifyCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>This endpoint is used to register a new user, and then a verification email is being sent. Example of the <strong>request body:</strong> </p>
+                                            <p>... Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    "fname": "John",
-    "lname": "Doe",
-    "email": "registeredemail@example.com",
-    "password": "password123",
-    "confirmPassword": "password123"
+    ...
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{'status': 'success', 'message': 'Registration successful. Verification email sent.'}
+{...}
                                             </pre>
                                         </div>
                                     </div>

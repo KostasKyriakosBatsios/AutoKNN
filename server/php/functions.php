@@ -5,7 +5,7 @@
         if (gethostname() == 'kclusterhub') {
             $domain = 'https://kclusterhub.iee.ihu.gr/autoknn';
         } else {
-            $domain = 'http://localhost/AutoKNN';
+            $domain = 'http://localhost/autoknn';
         }
         
         return $domain;
