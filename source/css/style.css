@@ -1,0 +1,35 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Dropdown menu called settings */
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: 100%;
+    margin-top: -6px;
+    margin-right: 0;
+    border-radius: 0.25rem;
+    display: none; 
+    white-space: nowrap;
+}
+
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    margin-left: 0;
+}
+
+.dropdown-menu-end {
+    right: 0; 
+}
+
+/* Welcome window */
+#welcome {
+    padding-top: 100px;
+}

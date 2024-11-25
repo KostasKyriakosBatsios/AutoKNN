@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home | AutoKNN</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="./source/css/style.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-sm fixed-top bg-dark navbar-dark">
+            <div class="container-fluid">
+                <!-- Name of web app: AutoKNN -->
+                <a class="navbar-brand" href="#">AutoKNN</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Main navigation (Home, About, dropdown Services, Rate) -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <!-- Home page -->
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <ion-icon name="home-outline"></ion-icon><span>Home</span>
+                            </a>
+                        </li>
+                        <!-- About page -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./web_pages/about.html">
+                                <i><ion-icon name="help-circle-outline"></ion-icon></i><span>About</span>
+                            </a>
+                        </li>
+                        <!-- Dropdown menu of our app -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i><ion-icon name="laptop-outline"></ion-icon></i><span>Services</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- New model -->
+                                <li>
+                                    <a class="dropdown-item" href="./web_pages/new_model.html">
+                                        <i><ion-icon name="duplicate-outline"></ion-icon></i><span>Create a model</span>
+                                    </a>
+                                </li>
+                                <!-- Pretrain model -->
+                                <li>
+                                    <a class="dropdown-item" href="./web_pages/pretrained_models.html">
+                                        <i><ion-icon name="eye-outline"></ion-icon></i><span>Pretrained Models</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Rate -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://forms.gle/yobQyc7v4heNRV7z9" target="_blank">
+                                <i><ion-icon name="thumbs-up-outline"></ion-icon></i><span>Rate</span>
+                            </a>
+                        </li>    
+                    </ul>
+                    <!-- Account navigation (Login, Register, dropdown Profile) -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Login button -->
+                        <li class="nav-item" id="loginBtn">
+                            <a class="nav-link" href="./web_pages/login.html">
+                                <i><ion-icon name="log-in-outline"></ion-icon></i><span>Login</span>
+                            </a>
+                        </li>
+                        <!-- Register button -->
+                        <li class="nav-item" id="registerBtn">
+                            <a class="nav-link" href="./web_pages/register.html">
+                                <i><ion-icon name="create-outline"></ion-icon></i><span>Register</span>
+                            </a>
+                        </li>
+                        <!-- Profile dropdown -->
+                        <li class="nav-item dropdown" id="profileNav">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <ion-icon name="person-circle-outline"></ion-icon><span>Profile</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <!-- Username display -->
+                                <li class="dropdown-item-text">
+                                    <strong id="username"></strong>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Settings dropdown -->
+                                <li class="nav-item dropdown dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#">
+                                        <i><ion-icon name="create-outline"></ion-icon></i><span>Settings</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <!-- Edit the name and the password -->
+                                        <li>
+                                            <a class="dropdown-item" href="./web_pages/edit_name_password.html">
+                                                <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Edit name and password</span>
+                                            </a>
+                                        </li>
+                                        <!-- Edit the email -->
+                                        <li>
+                                            <a class="dropdown-item" href="./web_pages/edit_email.html">
+                                                <i><ion-icon name="mail-outline"></ion-icon></i><span>Edit Email</span>
+                                            </a>
+                                        </li>
+                                        <!-- Delete the account -->
+                                        <li>
+                                            <a class="dropdown-item" href="./web_pages/delete_account.html">
+                                                <i><ion-icon name="trash-outline"></ion-icon></i><span>Delete Account</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- API documents -->
+                                <li>
+                                    <a class="dropdown-item" href="./web_pages/api_documents.html">
+                                        <i><ion-icon name="document-attach-outline"></ion-icon></i><span>API Docoments</span>
+                                    </a>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <!-- Logout -->
+                                <li>
+                                    <a class="dropdown-item" href="#" id="logoutBtn">
+                                        <i><ion-icon name="log-out-outline"></ion-icon></i><span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>                     
+                </div>
+            </div>
+        </nav>
+
+        <!-- All the application -->
+        <div class="container mt-5">
+            <div class="row">
+                <h1 class="text-center" id="welcome"></h1>
+                <h6 class="text-center">AutoKNN is a web application that demonstrates the functionality of the k-Nearest Neighbors (k-NN) algorithm.</h6>
+                <!-- About, Rate and profile dropdown Section Card -->
+                <div class="col-sm-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <!-- About Section -->
+                            <h2>About</h2>
+                            <p>If you want more details about the project, the developer, and other information (like social profiles and contact info), click the 'About' button on the navigation bar above. Or click the button below:</p>
+                            <div class="d-grid margin-top">
+                                <button class="btn btn-primary btn-lg" type="button" id="aboutBtn">
+                                    <i><ion-icon name="help-circle-outline"></ion-icon></i><span>Click me</span>
+                                </button>
+                            </div>
+                            <!-- Rate Section -->
+                            <h2 class="mt-4">Rate</h2>
+                            <p>If you would like to rate this web application, click the 'Rate' button on the navigation bar above, or use the button below:</p>
+                            <div class="d-grid margin-top">
+                                <button class="btn btn-primary btn-lg" type="button" id="rateBtn">
+                                    <i><ion-icon name="thumbs-up-outline"></ion-icon></i><span>Click me</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile dropdown Section -->
+                    <div class="card mb-4" id="profileCard">
+                        <div class="card-body">
+                            <h2>Profile dropdown section</h2>
+                            <p>The profile dropdown has 3 options: <strong>Settings</strong>, <strong>API documents</strong> and <strong>Logout</strong>. Click the 'Profile' button on the navigation bar above.</p>
+                            <!-- Settings -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2>Settings</h2>
+                                            <p>The Settings section has 3 options: <strong>Edit name and password</strong>, <strong>Edit email</strong> and <strong>Delete account</strong>.</p>
+                                            <!-- Edit name & password -->
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h2>Edit name and password</h2>
+                                                            <p>Here the user can change either the name, the password or both. To make these changes click the Edit name and password button of the Settings dropdown at the Profile dropdown, or click here:.</p>
+                                                            <div class="d-grid margin-top">
+                                                                <button class="btn btn-primary btn-lg" type="button" id="editNamePassBtn">
+                                                                    <i><ion-icon name="clipboard-outline"></ion-icon></i><span>Click me</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Edit email -->
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h2>Edit email</h2>
+                                                            <p>Here the user can change the email, in which the user will receive a verification link to confirm the change at the new email. To make this change click the Edit email button of the Settings dropdown at the Profile dropdown, or click here:</p>
+                                                            <div class="d-grid margin-top">
+                                                                <button class="btn btn-primary btn-lg" type="button" id="editEmailBtn">
+                                                                    <i><ion-icon name="mail-outline"></ion-icon></i><span>Click me</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Delete account -->
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h2>Delete account</h2>
+                                                            <p>Here the user can delete perminately the account. To make this change click the Delete account button of the Settings dropdown at the Profile dropdown, or click here:.</p>
+                                                            <div class="d-grid margin-top">
+                                                                <button class="btn btn-danger btn-lg" type="button" id="delAccBtn">
+                                                                    <i><ion-icon name="trash-outline"></ion-icon></i><span>Click me</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- API Documents -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2>API Documents</h2>
+                                            <p>Here you can find information about the API files used in this web application, a Github link of this project and your token. Go to the Profile dropdown to access the APIs, or click the button below:.</p>
+                                            <div class="d-grid margin-top">
+                                                <button class="btn btn-primary btn-lg" type="button" id="apiBtn">
+                                                    <i><ion-icon name="document-attach-outline"></ion-icon></i><span>Click me</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Logout -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2>Logout</h2>
+                                            <p>Here the user can Logout of the web application. To logout, click the logout button of the Profile dropdown, or click here:.</p>
+                                            <div class="d-grid margin-top">
+                                                <button class="btn btn-danger btn-lg" type="button" id="logout2Btn">
+                                                    <i><ion-icon name="log-out-outline"></ion-icon></i><span>Click me</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Service Section Card -->
+                <div class="col-sm-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2>Services</h2>
+                            <!-- Info Section with Collapsible Button -->
+                            <div class="margin-top">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#info">How to access the services section?</button>
+                                <div id="info" class="collapse mt-3">
+                                    <i><ion-icon name="information-circle-outline"></ion-icon></i>
+                                    <span id="text1">To access the <strong>Services</strong> section, login to the web app by clicking the <strong>Login</strong> button at the top-right corner of the navigation bar (If you do not have an account, click the <strong>Register</strong> button next to the <strong>Login</strong> button).</span>
+                                    <span id="text2">To access the <strong>Services</strong> section, now that you're logged in, click <strong>Services</strong>, then at dropdown, click <strong>Create a model</strong> for the 1st window of Services, or click <strong>Services</strong>, then at dropdown, click <strong>Pretrained model</strong> for the 2nd window of Services</span>
+                                </div>
+                            </div>
+                            <p class="mt-4">The services section contains 2 windows: <strong>Create new model</strong> and <strong>Pretrained models</strong>.</p>
+                            <!-- Create New Model Section Card -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2>Create New Model</h2>
+                                            <p>In this section, users can select an existing dataset or upload their own. After uploading, they can normalize the data, choose parameters, and execute the k-NN algorithm. Once executed, an evaluation appears, displaying metrics per class, average metrics, and the best parameters. To save the model, enter its name and click 'Save model'.</p>
+                                            <p>The picture on top, shows the half top of the evaluation window, in which includes the 'Metrics per Class' and the 'Average Metrics' tables.</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="./source/image/evaluation1.png" alt="model evaluation" class="img-fluid">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p>The picture below the top, is the other half of the evaluation window, in which shows the 'Best parameters' table, the text input for the model's name, and the 'Save model' button.</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="./source/image/evaluation2.png" alt="model evaluation" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pretrained Models Section Card -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2>Pretrained Models</h2>
+                                            <p>Previously built models appear here. Users can select a pretrained model and apply it to an unclassified dataset (which must match the class and features of the selected model) to predict class values. This process provides both average and per-class metrics, and results can be exported in CSV format.</p>
+                                            <p>The picture on top, shows the half top of the classified dataset window, in which includes the 'Metrics per Class' table (to see the table, the show buttom must be clicked) and the info button.</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="./source/image/classify1.png" alt="model evaluation" class="img-fluid">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p>The picture below the top, is the other half of the classified dataset window, in which shows the 'Average Metrics' table (to see the table, the show button must be clicked) and the 'Export to .csv' button.</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="./source/image/classify2.png" alt="model evaluation" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery, Popper, Bootstrap JS, JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="./source/js/script.js"></script>
+
+        <!-- ionicons -->
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+</html>

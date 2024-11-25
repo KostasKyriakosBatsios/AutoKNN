@@ -1,0 +1,61 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Dropdown menu called settings */
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: 100%;
+    margin-top: -6px;
+    margin-right: 0;
+    border-radius: 0.25rem;
+    display: none; 
+    white-space: nowrap;
+}
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    margin-left: 0; 
+}
+.dropdown-menu-end {
+    right: 0; 
+}
+
+/* About developer section */
+#about {
+    padding-top: 100px;
+}
+
+/* containers */
+.container-sm {
+    padding: 20px; /* Add padding to the container */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+}
+
+/* Specific margin top */
+.margin-top {
+    margin-top: 10px;
+}
+
+/* Image */
+#developerImg {
+    border-radius: 50%;
+    width: 45%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Inserting parameters */
+.sub-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 25px;
+}

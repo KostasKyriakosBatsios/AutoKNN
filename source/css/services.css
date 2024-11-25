@@ -1,0 +1,91 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Dropdown menu called settings */
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: 100%;
+    margin-top: -6px;
+    margin-right: 0;
+    border-radius: 0.25rem;
+    display: none; 
+    white-space: nowrap;
+}
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    margin-left: 0; 
+}
+.dropdown-menu-end {
+    right: 0; 
+}
+
+/* containers */
+.container-sm {
+    padding: 20px; /* Add padding to the container */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+}
+
+/* Specific margin top */
+.margin-top {
+    margin-top: 10px;
+}
+
+/* Uploading, choosing, downloading and deleting dataset */
+#dt {
+    padding-top: 100px;
+}
+
+h1 {
+    text-align: center;
+}
+
+/* both tables (normalized and just selected) */
+thead tr th {
+    text-align: center;
+}
+
+/* select tags */
+.form-select {
+    margin-top: 10px;
+}
+
+/* Inserting parameters */
+.sub-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 25px;
+}
+
+.inline-param {
+    width: 33%;
+    margin-top: 10px;
+}
+
+/* Ensure that form-check elements are displayed inline */
+.form-check-inline {
+    display: inline-block;
+    margin-right: 10px; /* Adjust spacing as needed */
+}
+
+.form-check-inline input {
+    margin-right: 5px; /* Adjust spacing between checkbox and label */
+}
+
+.field-text{
+    font-size: 15px;
+    color: #4D5154;
+}
+
+
+/* Pretrained Model */
+#pretrainedModel {
+    padding-top: 100px;
+}

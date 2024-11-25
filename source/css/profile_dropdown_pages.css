@@ -1,0 +1,110 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Dropdown menu called settings */
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    right: 100%;
+    margin-top: -6px;
+    margin-right: 0;
+    border-radius: 0.25rem;
+    display: none; 
+    white-space: nowrap;
+}
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    margin-left: 0; 
+}
+.dropdown-menu-end {
+    right: 0; 
+}
+
+/* Setting's container */
+.main-edit-name-pass {
+    margin-top: 100px;
+}
+
+#dtProcessing {
+    margin-top: 100px;
+}
+
+#apiDocs {
+    margin-top: 100px;
+}
+
+/* containers */
+.container-sm {
+    padding: 20px; /* Add padding to the container */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+}
+
+/* Specific margin top */
+.margin-top {
+    margin-top: 10px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.field-text{
+    font-size: 15px;
+    color: #4D5154;
+}
+
+.sub-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 25px;
+}
+
+.box-area {
+    width: 930px;
+}
+
+/* Right part */
+.right-box {
+    padding: 40px 30px 40px 40px;
+}
+
+::placeholder {
+    font-size: 16px;
+}
+
+/* Model evaluation */
+/* both tables (normalized and just selected) */
+thead tr th {
+    text-align: center;
+}
+
+#saveModelBtn {
+    margin-left: 10px;
+}
+
+/* Arrow of each section of API Documents */
+.accordion-button::after {
+    color: #fff; /* Makes the arrow white */
+    filter: brightness(100%);
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+    .box-area {
+        margin: 0 10px;
+    }
+    .left-box {
+        height: 100px;
+        overflow: hidden;
+    }
+    .right-box {
+        padding: 20px;
+    }
+}
