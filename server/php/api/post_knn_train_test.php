@@ -145,13 +145,12 @@
    if ($return === 0) {
        echo json_encode([
            "message" => "Completed execution of algorithm",
-           "dataset_id" => $dataset_id,
            "file" => $file,
+           "results_file_exists" => $resultFileExists,
+           "results_file_path" => $resultsFilePath,
            "output" => implode("\n", $output),
            "return_code" => $return,
-           "status" => $status,
-           "results_file_exists" => $resultFileExists,
-           "results_file_path" => $resultsFilePath
+           "status" => $status
        ]);
    } else {
        http_response_code(500);

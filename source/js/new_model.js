@@ -92,7 +92,10 @@ $(document).ready(function() {
                     $selectDataset.append(`<option value="${dataset.path}" data-type="private">[Private folder] ${dataset.name}</option>`);
                 });
             },
-            error: function() {
+            error: function(error, xhr, status) {
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 showAlert('danger', 'Failed to load datasets.', '#alertDatasets');
             }
         });
@@ -212,7 +215,10 @@ $(document).ready(function() {
                 $('#parameters').hide();
                 $('#individualFeatures').empty();
             },
-            error: function(jqXHR) {
+            error: function(error, xhr, status) {
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 // Show the upload button and hide the loading button
                 $('#uploadDtBtn').show();
                 $('#loadUploadingDatasetBtn').hide();
@@ -286,10 +292,12 @@ $(document).ready(function() {
 
                     $('#parameters').show();
                 },
-                error: function() {
+                error: function(error, xhr, status) {
+                    console.log('Error starting the algorithm:', error);
+                    console.log('XHR object:', xhr);
+                    console.log('Status:', status);
                     // Hide loading button
                     $('#loadDatasetBtn').hide();
-                    
                     showAlert('danger', 'An error occurred while loading the dataset.', '#alertPreview');
                 }
             });
@@ -444,7 +452,10 @@ $(document).ready(function() {
                 showAlert('success', response.message, '#alertDelModal');
                 loadDatasets();
             },
-            error: function(jqXHR) {
+            error: function(error, xhr, status) {
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#delDtBtn').show();
                 $('#loadDelDtBtn').hide();
                 $('#delBtn').show();
@@ -632,56 +643,76 @@ $(document).ready(function() {
             $('#datasetName').text(file);
             $('#processStatus').text('In progress');
 
-            // Debug values of parameters
-            console.log('File:', file);
-            console.log('Folder:', folderType);
-            console.log('Features:', features);
-            console.log('Class:', selectedClass);
-            console.log('k:', k_value);
-            console.log('Metric distance:', metricDistance_value);
-            console.log('p:', p);
-            console.log('Stratified sampling:', stratifiedSampling);
-
-            var requestData = JSON.stringify({
-                token: token,
-                file: file,
-                folder: folderType,
-                features: features,
-                target: selectedClass,
-                k_value: k_value,
-                distance_value: metricDistance_value,
-                p_value: p,
-                stratify: stratifiedSampling
-            });
-
-            // API call to execute the kNN algorithm
+            // API call on retrieving the results from the kNN algorithm
             $.ajax({
-                url: '../server/php/api/post_knn_train_test.php',
-                method: 'POST',
-                data: requestData,
+                url: '../server/php/api/get_knn_train_test.php',
+                method: 'GET',
+                data: JSON.stringify({
+                        token: token,
+                        file: file,
+                        features: features,
+                        target: selectedClass,
+                        k_value: k_value,
+                        distance_value: metricDistance_value,
+                        p_value: p,
+                        stratify: stratifiedSampling
+                }),
                 contentType: 'application/json',
-                success: function(response) {
-                    if (response.message === "Completed execution of algorithm") {
-                        // Fetch and display the results immediately after execution
-                        $('#buildModelBtn').prop('disabled', false);
-                        $('#processStatus').text(response.status);
-                        datasetId = response.dataset_id;
-                        fetchResults(datasetId);
-                    } else {
-                        // Show warning if something went wrong
-                        $('#buildModelBtn').prop('disabled', false);
-                        $('#processStatus').text(response.status);
-                        showAlert('warning', response.message, '#alertBuildModel');
+                success: function(results) {
+                    // Check the results
+                    if (results.length === 0) {
+                        displayResults(results);
+                        $('#evaluateBtn').prop('disabled', false);
+                        $('#saveModelBtn').prop('disabled', false);
                     }
+                    else {
+                        // API call to execute the kNN algorithm
+                        $.ajax({
+                            url: '../server/php/api/post_knn_train_test.php',
+                            method: 'POST',
+                            data: JSON.stringify({
+                                token: token,
+                                file: file,
+                                folder: folderType,
+                                features: features,
+                                target: selectedClass,
+                                k_value: k_value,
+                                distance_value: metricDistance_value,
+                                p_value: p,
+                                stratify: stratifiedSampling
+                            }),
+                            contentType: 'application/json',
+                            success: function(response) {
+                                if (response.message === "Completed execution of algorithm") {
+                                    // Fetch and display the results immediately after execution
+                                    $('#buildModelBtn').prop('disabled', false);
+                                    $('#processStatus').text(response.status);
+                                    fetchResults();
+                                } else {
+                                    // Show warning if something went wrong
+                                    $('#buildModelBtn').prop('disabled', false);
+                                    $('#processStatus').text(response.status);
+                                    showAlert('warning', response.message, '#alertBuildModel');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error during the kNN execution
+                                console.log('Error starting the algorithm:', error);
+                                console.log('XHR object:', xhr);
+                                console.log('Status:', status);
+                                $('#buildModelBtn').prop('disabled', false);
+                                $('#loadBuildModelBtn').hide();
+                                showAlert('danger', 'Failed to start the algorithm.', '#alertBuildModel');
+                            }
+                        });
+                    }
+
                 },
-                error: function(xhr, status, error) {
-                    // Handle error during the kNN execution
+                error: function(error, xhr, status) {
                     console.log('Error starting the algorithm:', error);
                     console.log('XHR object:', xhr);
                     console.log('Status:', status);
-                    $('#buildModelBtn').prop('disabled', false);
-                    $('#loadBuildModelBtn').hide();
-                    showAlert('danger', 'Failed to start the algorithm.', '#alertBuildModel');
+                    showAlert('danger', 'Failed to retrieve the results.', '#alertBuildModel');
                 }
             });
         } else {
@@ -692,22 +723,31 @@ $(document).ready(function() {
     });
 
     // Function to fetch and display the results
-    function fetchResults(datasetId) {
+    function fetchResults() {
         // API call on retrieving the results from the kNN algorithm
         $.ajax({
             url: '../server/php/api/get_knn_train_test.php',
             method: 'GET',
-            data: {
-                dataset_id: datasetId,
-                token: token
-            },
+            data: JSON.stringify({
+                token: token,
+                file: file,
+                features: features,
+                target: selectedClass,
+                k_value: k_value,
+                distance_value: metricDistance_value,
+                p_value: p,
+                stratify: stratifiedSampling
+            }),
             contentType: 'application/json',
             success: function(results) {
                 displayResults(results);
                 $('#evaluateBtn').prop('disabled', false);
                 $('#saveModelBtn').prop('disabled', false);
             },
-            error: function() {
+            error: function(error, xhr, status) {
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 showAlert('danger', 'Failed to retrieve the results.', '#alertBuildModel');
             }
         });
@@ -821,7 +861,10 @@ $(document).ready(function() {
                 showAlert('success', 'Model saved successfully.', '#alertEvaluation');
                 initializePage();
             },
-            error: function(error) {
+            error: function(error, xhr, status) {
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#saveModelBtn').show();
                 $('#loadSaveModelBtn').hide();
                 showAlert('danger', 'Failed to save the model.', '#alertEvaluation');

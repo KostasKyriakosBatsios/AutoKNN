@@ -23,11 +23,11 @@ def evaluate_knn(X_train, y_train, X_test, y_test, k, distance, p=None):
 
 
 if len(sys.argv) != 9:
-    print("Usage: python knn_train_test.py <normalized_file> <features> <target> <k_values> <distances> <p_value> <stratified_sampling> <results_file_path>")
+    print("Usage: python knn_train_test.py <file> <features> <target> <k_values> <distances> <p_value> <stratified_sampling> <results_file_path>")
     sys.exit(1)
 
 # The script arguments passed from PHP
-normalized_file = sys.argv[1]
+file = sys.argv[1]
 features = sys.argv[2].split(",")  # Comma-separated string -> list
 target = sys.argv[3]
 k_values = [int(k) for k in sys.argv[4].split(",")]  # Convert to list of integers
@@ -41,7 +41,7 @@ stratified_sampling = sys.argv[7].lower() == 'true'  # Convert to boolean
 results_path = sys.argv[8]
 
 # Load dataset
-dataset = pd.read_csv(normalized_file)
+dataset = pd.read_csv(file)
 
 # Split the features and target variables
 X = dataset[features].values
@@ -134,8 +134,15 @@ for label, metrics in label_metrics.items():
             'f1': metrics['f1'] / metrics['count']
         })
 
-# Output the best results as JSON
+# Output the best results and the parameters the user selected as JSON
 results = {
+    'dataset': file,
+    'features': features,
+    'class': target,
+    'k_values': k_values,
+    'distance_values': distance_values,
+    'p_value': p_value,
+    'stratified_sampling': stratified_sampling,
     'best_k': best_k,
     'best_distance': best_distance,
     'best_p': best_p,
