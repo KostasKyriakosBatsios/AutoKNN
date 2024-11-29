@@ -643,11 +643,20 @@ $(document).ready(function() {
             $('#datasetName').text(file);
             $('#processStatus').text('In progress');
 
+            // Console log the parameters
+            console.log('File:', file);
+            console.log('Selected class:', selectedClass);
+            console.log('Selected features:', selectedFeatures);
+            console.log('k:', k);
+            console.log('metricDistance:', metricDistance);
+            console.log('p:', p);
+            console.log('stratifiedSampling:', stratifiedSampling);
+
             // API call on retrieving the results from the kNN algorithm
             $.ajax({
                 url: '../server/php/api/get_knn_train_test.php',
                 method: 'GET',
-                data: JSON.stringify({
+                data: {
                         token: token,
                         file: file,
                         features: features,
@@ -656,63 +665,21 @@ $(document).ready(function() {
                         distance_value: metricDistance_value,
                         p_value: p,
                         stratify: stratifiedSampling
-                }),
-                contentType: 'application/json',
+                },
                 success: function(results) {
                     // Check the results
-                    if (results.length === 0) {
+                    if (results && results.length > 0) {
                         displayResults(results);
                         $('#evaluateBtn').prop('disabled', false);
                         $('#saveModelBtn').prop('disabled', false);
                     }
-                    else {
-                        // API call to execute the kNN algorithm
-                        $.ajax({
-                            url: '../server/php/api/post_knn_train_test.php',
-                            method: 'POST',
-                            data: JSON.stringify({
-                                token: token,
-                                file: file,
-                                folder: folderType,
-                                features: features,
-                                target: selectedClass,
-                                k_value: k_value,
-                                distance_value: metricDistance_value,
-                                p_value: p,
-                                stratify: stratifiedSampling
-                            }),
-                            contentType: 'application/json',
-                            success: function(response) {
-                                if (response.message === "Completed execution of algorithm") {
-                                    // Fetch and display the results immediately after execution
-                                    $('#buildModelBtn').prop('disabled', false);
-                                    $('#processStatus').text(response.status);
-                                    fetchResults();
-                                } else {
-                                    // Show warning if something went wrong
-                                    $('#buildModelBtn').prop('disabled', false);
-                                    $('#processStatus').text(response.status);
-                                    showAlert('warning', response.message, '#alertBuildModel');
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                // Handle error during the kNN execution
-                                console.log('Error starting the algorithm:', error);
-                                console.log('XHR object:', xhr);
-                                console.log('Status:', status);
-                                $('#buildModelBtn').prop('disabled', false);
-                                $('#loadBuildModelBtn').hide();
-                                showAlert('danger', 'Failed to start the algorithm.', '#alertBuildModel');
-                            }
-                        });
-                    }
-
                 },
                 error: function(error, xhr, status) {
                     console.log('Error starting the algorithm:', error);
                     console.log('XHR object:', xhr);
                     console.log('Status:', status);
-                    showAlert('danger', 'Failed to retrieve the results.', '#alertBuildModel');
+                    showAlert('warning', 'No matching file found. Execution of kNN starts now! Wait until the status changes to "Completed".', '#alertBuildModel');
+                    executeAlgorithm();
                 }
             });
         } else {
@@ -722,15 +689,16 @@ $(document).ready(function() {
         }
     });
 
-    // Function to fetch and display the results
-    function fetchResults() {
-        // API call on retrieving the results from the kNN algorithm
+    // Function to execute the kNN algorithm
+    function executeAlgorithm() {
+        // API call to execute the kNN algorithm
         $.ajax({
-            url: '../server/php/api/get_knn_train_test.php',
-            method: 'GET',
+            url: '../server/php/api/post_knn_train_test.php',
+            method: 'POST',
             data: JSON.stringify({
                 token: token,
                 file: file,
+                folder: folderType,
                 features: features,
                 target: selectedClass,
                 k_value: k_value,
@@ -739,6 +707,47 @@ $(document).ready(function() {
                 stratify: stratifiedSampling
             }),
             contentType: 'application/json',
+            success: function(response) {
+                if (response.message === "Completed execution of algorithm") {
+                    // Fetch and display the results immediately after execution
+                    $('#buildModelBtn').prop('disabled', false);
+                    $('#processStatus').text(response.status);
+                    fetchResults();
+                } else {
+                    // Show warning if something went wrong
+                    $('#buildModelBtn').prop('disabled', false);
+                    $('#processStatus').text(response.status);
+                    showAlert('warning', response.message, '#alertBuildModel');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
+                $('#buildModelBtn').prop('disabled', false);
+                $('#loadBuildModelBtn').hide();
+                showAlert('danger', 'Failed to start the algorithm.', '#alertBuildModel');
+            }
+        });
+    }
+
+    // Function to fetch and display the results
+    function fetchResults() {
+        // API call on retrieving the results from the kNN algorithm
+        $.ajax({
+            url: '../server/php/api/get_knn_train_test.php',
+            method: 'GET',
+            data: {
+                token: token,
+                file: file,
+                features: features,
+                target: selectedClass,
+                k_value: k_value,
+                distance_value: metricDistance_value,
+                p_value: p,
+                stratify: stratifiedSampling
+            },
             success: function(results) {
                 displayResults(results);
                 $('#evaluateBtn').prop('disabled', false);
