@@ -638,7 +638,6 @@ $(document).ready(function() {
             metricDistance_value = Array.isArray(metricDistance) ? metricDistance : [metricDistance];
 
             $('#loadBuildModelBtn').hide();
-            showAlert('success', 'The algorithm is executing. You will be redirected to the dataset process page shortly.', '#alertBuildModel');
             $('#dtProcessing').show();
             $('#datasetName').text(file);
             $('#processStatus').text('In progress');
@@ -657,28 +656,34 @@ $(document).ready(function() {
                 url: '../server/php/api/get_knn_train_test.php',
                 method: 'GET',
                 data: {
-                        token: token,
-                        file: file,
-                        features: features,
-                        target: selectedClass,
-                        k_value: k_value,
-                        distance_value: metricDistance_value,
-                        p_value: p,
-                        stratify: stratifiedSampling
+                    token: token,
+                    file: file,
+                    features: features,
+                    target: selectedClass,
+                    k_value: k_value,
+                    distance_value: metricDistance_value,
+                    p_value: p,
+                    stratify: stratifiedSampling
                 },
+                contentType: 'application/json',
                 success: function(results) {
-                    // Check the results
-                    if (results && results.length > 0) {
-                        displayResults(results);
+                    // If results are available, display them and change the status to "Completed"
+                    if (results) {
+                        showAlert('success', 'Model built successfully. Press "Show Evaluation" to see the results.', '#alertBuildModel');
+                        $('#processStatus').text('Completed');
                         $('#evaluateBtn').prop('disabled', false);
                         $('#saveModelBtn').prop('disabled', false);
+                        displayResults(results);
+                    } else {
+                        // If no results, execute the algorithm
+                        executeAlgorithm();
                     }
                 },
                 error: function(error, xhr, status) {
                     console.log('Error starting the algorithm:', error);
                     console.log('XHR object:', xhr);
                     console.log('Status:', status);
-                    showAlert('warning', 'No matching file found. Execution of kNN starts now! Wait until the status changes to "Completed".', '#alertBuildModel');
+                    showAlert('success', 'Execution of kNN starts now! Wait until the status changes to "Completed".', '#alertBuildModel');
                     executeAlgorithm();
                 }
             });
@@ -748,10 +753,12 @@ $(document).ready(function() {
                 p_value: p,
                 stratify: stratifiedSampling
             },
+            contentType: 'application/json',
             success: function(results) {
-                displayResults(results);
+                showAlert('success', 'Model built successfully. Press "Show Evaluation" to see the results.', '#alertBuildModel');
                 $('#evaluateBtn').prop('disabled', false);
                 $('#saveModelBtn').prop('disabled', false);
+                displayResults(results);
             },
             error: function(error, xhr, status) {
                 console.log('Error starting the algorithm:', error);
@@ -761,11 +768,6 @@ $(document).ready(function() {
             }
         });
     }
-
-    // Global variables to save the best k, metric distance and p
-    let best_k = null;
-    let best_distance = null;
-    let best_p = null;
 
     // Function to display the results
     function displayResults(results) {
@@ -786,7 +788,7 @@ $(document).ready(function() {
                 </tr>`
             );
         });
-    
+
         // Display average metrics
         let avgMetricsTBody = $('#resultsavgMetricsTBody');
         avgMetricsTBody.empty();
@@ -798,7 +800,7 @@ $(document).ready(function() {
                 <td>${results.average_f1.toFixed(2)}</td>
             </tr>`
         );
-    
+
         // Display best parameters
         let bestParmsTBody = $('#resultsBestParmsTBody');
         bestParmsTBody.empty();
@@ -813,7 +815,7 @@ $(document).ready(function() {
                 <td>${results.best_p || 'None'}</td>
             </tr>`
         );
-    }    
+    }
     
     // When pressed the button, make the model evaluation window appear
     $('#evaluateBtn').on('click', function() {
