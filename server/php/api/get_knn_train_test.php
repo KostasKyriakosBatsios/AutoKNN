@@ -12,13 +12,12 @@
     }
 
     // Validate required parameters
-    $requiredParams = ['token', 'file', 'features', 'target', 'k_value', 'distance_value', 'p_value', 'stratify'];
-    foreach ($requiredParams as $param) {
-        if (!isset($_GET[$param])) {
-            http_response_code(400);
-            echo json_encode(["message" => "Missing required parameter: $param"]);
-            exit;
-        }
+    if (!isset($_GET['token']) || !isset($_GET['file'])  || !isset($_GET['features'])
+       || !isset($_GET['target']) || !isset($_GET['k_value']) || !isset($_GET['distance_value'])
+       || !isset($_GET['stratify'])) {
+       http_response_code(400);
+       echo json_encode(["message" => "Missing required parameters"]);
+       exit;
     }
 
     // Retrieve parameters
@@ -28,8 +27,15 @@
     $selectedClass = $_GET['target'];
     $k_value = is_string($_GET['k_value']) ? json_decode($_GET['k_value'], true) : $_GET['k_value'];
     $metricDistance_value = is_string($_GET['distance_value']) ? json_decode($_GET['distance_value'], true) : $_GET['distance_value'];
-    $p = (int)$_GET['p_value'];
+    $p = $_GET['p_value'];
     $stratifiedSampling = filter_var($_GET['stratify'], FILTER_VALIDATE_BOOLEAN);
+
+    // Check if p is null
+    if ($p === null || $p === "null") {
+        $p = null;
+    } else {
+        $p = intval($p);
+    }
 
     // Validate token
     $sql = "SELECT email FROM users WHERE token = ?";
@@ -50,7 +56,7 @@
     $hash_user = md5($email);
     $directories = ['../../python/public/models_json/', '../../python/private/' . $hash_user . '/' . 'models_json/'];
 
-    // Helper function
+    // Helper function to check if the parameteres match
     function parametersMatch($storedData, $requestData) {
         return isset(
             $storedData['dataset'], $storedData['features'], $storedData['class'],
@@ -62,9 +68,9 @@
             $storedData['class'] === $requestData['class'] &&
             array_map('intval', $storedData['k_values']) === $requestData['k_values'] &&
             $storedData['distance_values'] === $requestData['distance_values'] &&
-            (int)$storedData['p_value'] === $requestData['p_value'] &&
+            $storedData['p_value'] === $requestData['p_value'] &&
             $storedData['stratified_sampling'] === $requestData['stratified_sampling'];
-    }
+    }      
 
     // Prepare request data
     $requestData = [

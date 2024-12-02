@@ -411,10 +411,12 @@ $(document).ready(function() {
             $('#dnloadUnclassifiedBtn').prop('disabled', false);
             $('#delUnclassifiedBtn').prop('disabled', false);
             $('#tableUnclassifiedDt').show();
+            $('#classifiedDt').hide();
         } else {
             $('#dnloadUnclassifiedBtn').prop('disabled', true);
             $('#delUnclassifiedBtn').prop('disabled', true);
             $('#tableUnclassifiedDt').hide();
+            $('#classifiedDt').hide();
         }
 
         if (unclassified_file && token) {
@@ -617,9 +619,6 @@ $(document).ready(function() {
 
                 // Check if the classification was successful
                 if (response.return_code === 0) {                    
-                    // Call functions to display results
-                    displayResults(response.results);
-
                     classifiedDataset = response.classified_file.split('/').pop();
 
                     // Make another API call to load the classified dataset
@@ -630,7 +629,7 @@ $(document).ready(function() {
                             token: token,
                             file: classifiedDataset // Sending parameters in query string
                         },
-                        dataType: 'json',
+                        contentType: 'application/json',
                         success: function(response) {
                             var header = response.header;
                             var data = response.data;
@@ -644,6 +643,31 @@ $(document).ready(function() {
                             $('#alertClassifyDtModal').html(error.responseJSON.message);
                         }
                     });
+
+                    // Initialize variable resutls
+                    var results = response.results;
+
+                    // Call functions to display results, if the results file contains "accuracy", "average_precision", "average_recall", "average_f1_score", "precision_per_label", "recall_per_label" and "f1_score_per_label"
+                    if (
+                        results.accuracy !== undefined &&
+                        results.average_precision !== undefined &&
+                        results.average_recall !== undefined &&
+                        results.average_f1_score !== undefined &&
+                        results.precision_per_label !== undefined &&
+                        results.recall_per_label !== undefined &&
+                        results.f1_score_per_label !== undefined
+                    ) {
+                        // All metrics are present, now display the results
+                        displayResults(results);
+                        
+                        // Show the buttons to display tables
+                        $('#showMetricsBtn').show();
+                        $('#showAvgMetricsBtn').show();
+                    } else {
+                        // Hide the buttons if metrics are not present
+                        $('#showMetricsBtn').hide();
+                        $('#showAvgMetricsBtn').hide();
+                        }
                 }
             },
             error: function(error) {
@@ -653,6 +677,34 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Function to populate the classified dataset table
+    function populateClassifiedDataset(header, data) {
+        var thead = $('#dataNormalClassifiedFeaturesNamesTHead');
+        var tbody = $('#dataNormalClassifiedFeaturesNamesTBody');
+
+        // Clear previous contents
+        thead.empty();
+        tbody.empty();
+
+        // Add header row
+        header.forEach(function(col) {
+            thead.append('<th>' + col + '</th>');
+        });
+
+        // Limit the data to the first 10 rows
+        var limitedData = data.slice(0, 10);
+
+        // Add data rows
+        limitedData.forEach(function(row) {
+            var tr = '<tr>';
+            row.forEach(function(cell) {
+                tr += '<td>' + cell + '</td>';
+            });
+            tr += '</tr>';
+            tbody.append(tr);
+        });
+    }
 
     // Function to display results in the metrics table
     function displayResults(results) {
@@ -688,34 +740,6 @@ $(document).ready(function() {
                 <td>${results.average_f1_score.toFixed(2)}</td>
             </tr>`
         );
-    }
-
-    // Function to populate the classified dataset table
-    function populateClassifiedDataset(header, data) {
-        var thead = $('#dataNormalClassifiedFeaturesNamesTHead');
-        var tbody = $('#dataNormalClassifiedFeaturesNamesTBody');
-
-        // Clear previous contents
-        thead.empty();
-        tbody.empty();
-
-        // Add header row
-        header.forEach(function(col) {
-            thead.append('<th>' + col + '</th>');
-        });
-
-        // Limit the data to the first 10 rows
-        var limitedData = data.slice(0, 10);
-
-        // Add data rows
-        limitedData.forEach(function(row) {
-            var tr = '<tr>';
-            row.forEach(function(cell) {
-                tr += '<td>' + cell + '</td>';
-            });
-            tr += '</tr>';
-            tbody.append(tr);
-        });
     }
 
     $('#exportBtn').on('click', function() {

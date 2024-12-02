@@ -32,7 +32,11 @@ features = sys.argv[2].split(",")
 target_class = sys.argv[3]
 k_value = int(sys.argv[4])
 distance_value = sys.argv[5]
-p_value = int(sys.argv[6]) if sys.argv[6] else None
+
+p_value = sys.argv[6] if sys.argv[6] and sys.argv[6] != 'null' else None
+if p_value:
+    p_value = int(p_value)  # Convert to integer if it's not None
+    
 saved_model_file = sys.argv[7]
 
 # Call the function to save the model

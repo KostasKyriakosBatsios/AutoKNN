@@ -750,15 +750,23 @@
                                     </button>
                                     <div id="postKnnCollapse" class="accordion-collapse collapse" aria-labelledby="postKnnCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>... Example of the <strong>request body:</strong> </p>
+                                            <p>This endpoint is used to execute the KNN algorithm. Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    ...
+    "token": "your_token",
+    "file": "selected_dataset.csv",
+    "folder": "folder_of_selected_dataset",
+    "features": ["selected_feature1", "selected_feature2", "selected_feature3", "..."],
+    "target": "selectedClass",
+    "k_value": [k_value] or [1,...,50],
+    "distance_value": ["metricDistance_value"] or ["euclidean", "manhattan", "chebyshev", "minkowski"],
+    "p_value": null or 3 or 4,
+    "stratify": true or false
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{...}
+{"message":"Completed execution of algorithm","status":"Completed"}
                                             </pre>
                                         </div>
                                     </div>
@@ -768,15 +776,77 @@
                                     </button>
                                     <div id="getKnnCollapse" class="accordion-collapse collapse" aria-labelledby="getKnnCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>... Example of the <strong>request body:</strong> </p>
+                                            <p>This endpoint is used to retrieve the results of the KNN algorithm (either before executing it, if it already exists, or after execution). Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    ...
+    "token": "your_token",
+    "file": "selected_dataset.csv",
+    "features": ["selected_feature1", "selected_feature2", "selected_feature3", "..."],
+    "target": "selectedClass",
+    "k_value": [k_value] or [1,...,50],
+    "distance_value": ["metricDistance_value"] or ["euclidean", "manhattan", "chebyshev", "minkowski"],
+    "p_value": null or 3 or 4,
+    "stratify": true or false
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{...}
+{
+    "dataset": "../../path/to/selected_dataset.csv",
+    "features": [
+        "selected_feature1",
+        "selected_feature2",
+        "selected_feature3",
+        "..."
+    ],
+    "class": "selectedClass",
+    "k_values": [k_value] or [
+        1,
+        ...,
+        50
+    ],
+    "distance_values": [
+        "metricDistance_value"
+    ] or [
+        "euclidean",
+        "manhattan",
+        "chebyshev",
+        "minkowski"
+    ],
+    "p_value": null or 3 or 4,
+    "stratified_sampling": true or false,
+    "best_k": result_of_best_k,
+    "best_distance": "result_of_best_metricDistance",
+    "best_p": result_of_best_p,
+    "max_accuracy": result_of_max_accuracy,
+    "best_precision": result_of_best_precision,
+    "best_recall": result_of_best_recall,
+    "best_f1": result_of_best_fscore,
+    "average_accuracy": calculated_average_accuracy,
+    "average_precision": calculated_average_precision,
+    "average_recall": calculated_average_recall,
+    "average_f1": calculated_average_fscore,
+    "class_metrics": [
+        {
+            "class": "class_label1",
+            "precision": calculated_precision,
+            "recall": calculated_recall,
+            "f1": calculated_fscore
+        },
+        {
+            "class": "class_label2",
+            "precision": calculated_precision,
+            "recall": calculated_recall,
+            "f1": calculated_fscore
+        },
+        {
+            "class": "class_label3",
+            "precision": calculated_precision,
+            "recall": calculated_recall,
+            "f1": calculated_fscore
+        }
+    ]
+}
                                             </pre>
                                         </div>
                                     </div>
@@ -789,12 +859,24 @@
                                             <p>... Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    ...
+    "token": "your_token",
+    "file": "selected_dataset.csv",
+    "folder": "folder_of_selected_dataset",
+    "features": ["selected_feature1", "selected_feature2", "selected_feature3", "..."],
+    "target": "selectedClass",
+    "k_value": [k_value] or [1,...,50],
+    "distance_value": ["metricDistance_value"] or ["euclidean", "manhattan", "chebyshev", "minkowski"],
+    "p_value": null or 3 or 4,
+    "best_k": result_of_best_k,
+    "best_distance": "result_of_best_metricDistance",
+    "best_p": result_of_best_p,
+    "stratify": true or false,
+    "model_name": "model_name_the_user_wants_to_save"
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{...}
+{"message": "Model saved successfully."}
                                             </pre>
                                         </div>
                                     </div>
@@ -804,15 +886,122 @@
                                     </button>
                                     <div id="classifyCollapse" class="accordion-collapse collapse" aria-labelledby="classifyCollapse" data-bs-parent="#usersCollapse">
                                         <div class="accordion-body">
-                                            <p>... Example of the <strong>request body:</strong> </p>
+                                            <p>This endpoint is being used to classify the dataset, based on the built model the user chose. Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
-    ...
+    "token": "your_token",
+    "features": ["selected_model_feature1", "selected_model_feature2", "selected_model_feature3", "..."],
+    "class": "selected_model_class",
+    "file": "selected_unclassified_file.csv",
+    "model": "selected_model_file.pkl"
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{...}
+{
+    "results": {
+        "dataset": [
+            [
+                "selected_model_feature1",
+                "selected_model_feature2",
+                "selected_model_feature3",
+                ...,
+                "predicted"
+            ],
+            [
+                5.1,
+                3.5,
+                1.4,
+                0.2,
+                "selected_model_class_label1"
+            ],
+            [
+                4.9,
+                3,
+                1.4,
+                0.2,
+                "selected_model_class_label2"
+            ],
+            [
+                4.7,
+                3.2,
+                1.3,
+                0.2,
+                "selected_model_class_label3"
+            ],
+            ...
+        ],
+        "labels": [
+            "Setosa",
+            "Setosa",
+            "Setosa",
+            ...
+        ]
+    }, or
+    "results": {
+        "dataset": [
+            [
+                "selected_model_feature1",
+                "selected_model_feature2",
+                "selected_model_feature3",
+                ...,
+                "predicted"
+            ],
+            [
+                5.1,
+                3.5,
+                1.4,
+                0.2,
+                "selected_model_class_label1"
+            ],
+            [
+                4.9,
+                3,
+                1.4,
+                0.2,
+                "selected_model_class_label2"
+            ],
+            [
+                4.7,
+                3.2,
+                1.3,
+                0.2,
+                "selected_model_class_label3"
+            ],
+            ...
+        ],
+        "accuracy": calculated_accuracy,
+        "average_precision": calculated_average_precision,
+        "average_recall": calculated_average_recall,
+        "average_f1_score": calculated_average_fscore,
+        "precision_per_label": [
+            calculated_label1,
+            calculated_label2,
+            calculated_label3,
+            ...
+        ],
+        "recall_per_label": [
+            calculated_label1,
+            calculated_label2,
+            calculated_label3,
+            ...
+        ],
+        "f1_score_per_label": [
+            calculated_label1,
+            calculated_label2,
+            calculated_label3,
+            ...
+        ],
+        "labels": [
+            "label1",
+            "label2",
+            "label3",
+            ...
+        ]
+    },
+    "classified_file": "../../path/to/classified_file.csv",
+    "return_code": 0
+}
                                             </pre>
                                         </div>
                                     </div>

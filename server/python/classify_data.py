@@ -28,9 +28,6 @@ results = {}
 
 # Check if the class column is provided and valid
 if class_name != 'None' and class_name in dataset.columns:
-    # Add the class column to the dataset
-    dataset["class"] = dataset[class_name]
-
     # Calculate metrics
     class_label = dataset[class_name]
     labels = class_label.unique().tolist()  # Get unique labels
@@ -60,8 +57,8 @@ if class_name != 'None' and class_name in dataset.columns:
     dataset["predicted"] = predicted_values
 
     # Prepare output data
-    columns = dataset[features + ["class", "predicted"]].columns.to_list()
-    rows = dataset[features + ["class", "predicted"]].values.tolist()
+    columns = dataset[features + ["predicted"]].columns.to_list()
+    rows = dataset[features + ["predicted"]].values.tolist()
     data = [columns] + rows
 
     # Construct the results dictionary

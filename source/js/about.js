@@ -25,4 +25,9 @@ $(document).ready(function() {
         localStorage.removeItem('lname');
         window.location.href = '../index.html'; // Redirect to home page
     });
+
+    // Hanlder when the #githubBtn button is clicked
+    $('#githubBtn').on('click', function() {
+        window.open('https://github.com/KostasKyriakosBatsios/AutoKNN');
+    });
 });

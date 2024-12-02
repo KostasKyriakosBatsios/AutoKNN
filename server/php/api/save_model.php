@@ -15,7 +15,7 @@
     
     if (!isset($data['token']) || !isset($data['file']) || !isset($data['folder']) || !isset($data['features'])
         || !isset($data['target']) || !isset($data['k_value']) || !isset($data['distance_value'])
-        || !isset($data['stratify']) || !isset($data['dataset_id']) || !isset($data['model_name'])) {
+        || !isset($data['best_k_value']) || !isset($data['best_distance_value']) || !isset($data['stratify']) || !isset($data['model_name'])) {
         http_response_code(400);
         echo json_encode(["message" => "Missing required parameters"]);
         exit;
@@ -26,12 +26,19 @@
     $folder = $data['folder'];
     $features = implode(",", $data['features']);
     $target = $data['target'];
-    $k_value = $data['k_value'];
-    $distance_value = $data['distance_value'];
+    $k_value = implode(",", $data['k_value']);
+    $distance_value = implode(",", $data['distance_value']);
+    $best_k_value = $data['best_k_value'];
+    $best_distance_value = $data['best_distance_value'];
     $p_value = $data['p_value'];
-    $stratify = $data['stratify'] ? 1 : 0;
-    $dataset_id = $data['dataset_id'];
+    $best_p_value = $data['best_p_value'];
+    $stratify = $data['stratify'] ? 'true' : 'false';
     $model_name = $data['model_name'];
+
+    // Check if p is null
+    if ($p_value === null) {
+        $p_value = "null";
+    }
 
     $query = "SELECT id, email FROM users WHERE token = ?";
     $stmt = $mysqli->prepare($query);
@@ -49,47 +56,67 @@
     $user_id = $user['id'];
     $email = $user['email'];
     $hash_user = md5($email);
+
+    // Initialize $dataset_id
+    $dataset_id = null;
     
-    $publicDir = '../../python/public/datasets';
-    $privateDir = '../../python/private/' . $hash_user . '/datasets';
-    
-    $filePath = ($folder === 'public') ? $publicDir . '/' . $file : $privateDir . '/' . $file;
-    
-    if (!file_exists($filePath)) {
-        http_response_code(400);
-        echo json_encode(["message" => "File not found"]);
-        exit;
-    }
-    
-    // Check if the model exists in dataset_execution table
-    $checkExecutionQuery = "SELECT id FROM dataset_execution WHERE id = ?";
-    $stmt = $mysqli->prepare($checkExecutionQuery);
-    $stmt->bind_param("i", $dataset_id);
+    // Based on the parameters, extract the id from dataset_execution table
+    $sql = "SELECT id
+            FROM dataset_execution
+            WHERE name_of_dataset = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.features')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.target')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.k')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.distance')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.p')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.stratified_sampling')) = ?
+            LIMIT 1"; // Ensure only the first match is selected
+
+    // Prepare the statement
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("sssssss", $file, $features, $target, $k_value, $distance_value, $p_value, $stratify);
     $stmt->execute();
-    $stmt->store_result();
-    
-    if ($stmt->num_rows === 0) {
-        http_response_code(400);
-        echo json_encode(["message" => "Model ID does not exist in dataset_execution"]);
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $dataset_id = $row['id'];
+    } else {
+        echo "No dataset execution found with these parameters. Try again";
         exit;
     }
+
+    // Close the statement
+    $stmt->close();
     
+    // Determine file path based on folder type
+    $filePath = '';
+    if ($folder === 'public') {
+        $filePath = '../../python/public/datasets/' . $file;
+    } else {
+        $filePath = '../../python/private/' . $hash_user . '/' . 'datasets/' . $file;
+    }
+
+    // Check if the name already exists
+    $sql = "SELECT * FROM models WHERE name_of_model = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("s", $model_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    
+    if ($result->num_rows > 0) {
+        http_response_code(409); // Conflict status code
+        echo json_encode(["message" => "A model with this name already exists. Please choose a different name."]);
+        exit;
+    }
+
     // Validate the model name (only allow letters, numbers, underscores, and hyphens)
     if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $model_name)) {
         http_response_code(400);
         echo json_encode(["message" => "Invalid model name. It must start with a letter and can only contain letters, numbers, underscores, and hyphens."]);
         exit;
     }
-
-    // Check where the results file is saved (public or private folder)
-    $resultsDir = '';
-    if ($folder === 'public') {
-        $resultsDir = '../../python/public/models_json/';
-    } else {
-        $resultsDir = '../../python/private/' . $hash_user . '/' . 'models_json/';
-    }
-
-    $resultsFilePath = $resultsDir . $dataset_id . '.json';
     
     $savedModelFilePath = '../../python/private/' . $hash_user . '/' . 'models_saved/' . $model_name . '.pkl';
 
@@ -104,9 +131,9 @@
     $escapedFilePath = escapeshellarg($filePath);
     $escapedFeatures = escapeshellarg($features);
     $escapedTarget = escapeshellarg($target);
-    $escapedKValue = escapeshellarg($k_value);
-    $escapedDistanceValue = escapeshellarg($distance_value);
-    $escapedPValue = escapeshellarg($p_value);
+    $escapedKValue = escapeshellarg($best_k_value);
+    $escapedDistanceValue = escapeshellarg($best_distance_value);
+    $escapedPValue = escapeshellarg($best_p_value);
     $escapedSavedModelFilePath = escapeshellarg($savedModelFilePath);
     
     $pythonCmd = "python3 ../../python/save_model.py $escapedFilePath $escapedFeatures $escapedTarget $escapedKValue $escapedDistanceValue $escapedPValue $escapedSavedModelFilePath 2>&1";
@@ -118,17 +145,13 @@
     
     // Now save the model details in models table
     $name_of_class = $target; 
-    $modelClassesQuery = "INSERT INTO models (id_of_executed_dataset, name_of_model, features, name_of_class, k, metric_distance, p, stratified_sampling) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $mysqli->prepare($modelClassesQuery);
-    $stmt->bind_param("isssisii", $dataset_id, $model_name, $features, $name_of_class, $k_value, $distance_value, $p_value, $stratify);
+    $sql = "INSERT INTO models (id_of_executed_dataset, name_of_model, features, name_of_class, k, metric_distance, p, stratified_sampling) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("isssisii", $dataset_id, $model_name, $features, $name_of_class, $best_k_value, $best_distance_value, $best_p_value, $stratify);
     $stmt->execute();
+    $stmt->close();
 
     echo json_encode([
-        "dataset_id" => $dataset_id,
-        "file" => $file,
-        "command" => $pythonCmd,
-        "output" => implode("\n", $output),
-        "return_code" => $return,
-        "saved_model_file" => $savedModelFilePath 
+        "message" => "Model saved successfully.",
     ]);
 ?>

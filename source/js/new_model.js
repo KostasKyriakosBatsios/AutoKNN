@@ -26,7 +26,7 @@ $(document).ready(function() {
     $('#k').val('');
     $('#metricDistance').prop('selectedIndex', 0);
     $('#p').val('').prop('disabled', true);
-    $('#autoChoice').prop('selectedIndex', 0);
+    $('#checkAutoK').prop('selectedIndex', 0);
     $('#checkStratifiedSampling').prop('checked', false);
 
     // Initialize tooltips
@@ -250,10 +250,32 @@ $(document).ready(function() {
             $('#dnloadBtn').prop('disabled', false);
             $('#delBtn').prop('disabled', false);
             $('#tableDt').show();
+            $('#parameters').show();
+            $('#dtProcessing').hide();
+            $('#modelEvaluation').hide();
+            $('#individualFeatures input[type="checkbox"]').prop('checked', false);
+            $('#selectAllFeatures').prop('checked', false);
+            $('#selectClass').prop('selectedIndex', 0);
+            $('#k').val('');
+            $('#metricDistance').prop('selectedIndex', 0);
+            $('#p').val('').prop('disabled', true);
+            $('#checkAutoK').prop('selectedIndex', 0);
+            $('#checkStratifiedSampling').prop('checked', false);
         } else {
             $('#dnloadBtn').prop('disabled', true);
             $('#delBtn').prop('disabled', true);
             $('#tableDt').hide();
+            $('#parameters').hide();
+            $('#dtProcessing').hide();
+            $('#modelEvaluation').hide();
+            $('#individualFeatures input[type="checkbox"]').prop('checked', false);
+            $('#selectAllFeatures').prop('checked', false);
+            $('#selectClass').prop('selectedIndex', 0);
+            $('#k').val('');
+            $('#metricDistance').prop('selectedIndex', 0);
+            $('#p').val('').prop('disabled', true);
+            $('#checkAutoK').prop('selectedIndex', 0);
+            $('#checkStratifiedSampling').prop('checked', false);
         }
 
         if (file && token) {
@@ -622,8 +644,8 @@ $(document).ready(function() {
     let k_value = [];
     let metricDistance_value = [];
 
-    // Initialize dataset's id
-    let datasetId = null;
+    // Initialize dataset_id
+    let dataset_id = null;
 
     // Handler when the user presses the build model button
     $('#buildModelBtn').on('click', function() {
@@ -643,14 +665,13 @@ $(document).ready(function() {
             $('#processStatus').text('In progress');
 
             // Console log the parameters
-            console.log('File:', file);
-            console.log('Selected class:', selectedClass);
-            console.log('Selected features:', selectedFeatures);
-            console.log('k:', k);
-            console.log('metricDistance:', metricDistance);
+            console.log('Features:', features);
+            console.log('Class:', selectedClass);
+            console.log('k:', k_value);
+            console.log('Metric Distance:', metricDistance_value);
             console.log('p:', p);
-            console.log('stratifiedSampling:', stratifiedSampling);
-
+            console.log('Stratified Sampling:', stratifiedSampling);
+            
             // API call on retrieving the results from the kNN algorithm
             $.ajax({
                 url: '../server/php/api/get_knn_train_test.php',
@@ -717,7 +738,8 @@ $(document).ready(function() {
                     // Fetch and display the results immediately after execution
                     $('#buildModelBtn').prop('disabled', false);
                     $('#processStatus').text(response.status);
-                    fetchResults();
+                    dataset_id = response.dataset_id;
+                    fetchResults(dataset_id);
                 } else {
                     // Show warning if something went wrong
                     $('#buildModelBtn').prop('disabled', false);
@@ -738,7 +760,7 @@ $(document).ready(function() {
     }
 
     // Function to fetch and display the results
-    function fetchResults() {
+    function fetchResults(dataset_id) {
         // API call on retrieving the results from the kNN algorithm
         $.ajax({
             url: '../server/php/api/get_knn_train_test.php',
@@ -747,6 +769,7 @@ $(document).ready(function() {
                 token: token,
                 file: file,
                 features: features,
+                datasetId: dataset_id,
                 target: selectedClass,
                 k_value: k_value,
                 distance_value: metricDistance_value,
@@ -755,10 +778,15 @@ $(document).ready(function() {
             },
             contentType: 'application/json',
             success: function(results) {
-                showAlert('success', 'Model built successfully. Press "Show Evaluation" to see the results.', '#alertBuildModel');
-                $('#evaluateBtn').prop('disabled', false);
-                $('#saveModelBtn').prop('disabled', false);
-                displayResults(results);
+                if (results) {
+                    $('#processStatus').text('Completed');
+                    $('#evaluateBtn').prop('disabled', false);
+                    $('#saveModelBtn').prop('disabled', false);
+                    showAlert('success', 'Model built successfully. Results fetched.', '#alertBuildModel');
+                    displayResults(results);
+                } else {
+                    showAlert('danger', 'No results found. Try re-running the algorithm.', '#alertBuildModel');
+                }
             },
             error: function(error, xhr, status) {
                 console.log('Error starting the algorithm:', error);
@@ -838,9 +866,9 @@ $(document).ready(function() {
     
         var modelName = $('#modelName').val().trim();
     
-        // Ensure the model name starts with "model_" and contains at least one letter afterward
-        if (!modelName || !/^model_[a-zA-Z].*[0-9a-zA-Z]*$/.test(modelName)) {
-            showAlert('danger', 'Please enter a valid model name starting with "model_" and containing at least one letter.', '#alertEvaluation');
+        // Ensure the model name contains at least one letter and optionally a number
+        if (!modelName || !/^(?=.*[a-zA-Z])[a-zA-Z0-9]*$/.test(modelName)) {
+            showAlert('danger', 'Please enter a valid model name containing at least one letter, and optionally a number.', '#alertEvaluation');
             $('#saveModelBtn').show();
             $('#loadSaveModelBtn').hide();
             return;
@@ -852,11 +880,13 @@ $(document).ready(function() {
             folder: folderType,
             features: features,
             target: selectedClass,
-            k_value: best_k,
-            distance_value: best_distance,
-            p_value: best_p,
+            k_value: k_value,
+            distance_value: metricDistance_value,
+            p_value: p,
+            best_k_value: best_k,
+            best_distance_value: best_distance,
+            best_p_value: best_p,
             stratify: stratifiedSampling,
-            dataset_id: datasetId,
             model_name: modelName
         });
     
@@ -870,7 +900,6 @@ $(document).ready(function() {
                 $('#saveModelBtn').show();
                 $('#loadSaveModelBtn').hide();
                 showAlert('success', 'Model saved successfully.', '#alertEvaluation');
-                initializePage();
             },
             error: function(error, xhr, status) {
                 console.log('Error starting the algorithm:', error);
