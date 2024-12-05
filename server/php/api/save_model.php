@@ -13,7 +13,7 @@
     
     $data = json_decode(file_get_contents("php://input"), true);
     
-    if (!isset($data['token']) || !isset($data['file']) || !isset($data['folder']) || !isset($data['features'])
+    if (!isset($data['token']) || !isset($data['file']) || !isset($data['dataset_id']) || !isset($data['folder']) || !isset($data['features'])
         || !isset($data['target']) || !isset($data['k_value']) || !isset($data['distance_value'])
         || !isset($data['best_k_value']) || !isset($data['best_distance_value']) || !isset($data['stratify']) || !isset($data['model_name'])) {
         http_response_code(400);
@@ -23,6 +23,7 @@
     
     $token = $data['token'];
     $file = $data['file'];
+    $dataset_id = $data['dataset_id'];
     $folder = $data['folder'];
     $features = implode(",", $data['features']);
     $target = $data['target'];
@@ -36,8 +37,8 @@
     $model_name = $data['model_name'];
 
     // Check if p is null
-    if ($p_value === null) {
-        $p_value = "null";
+    if ($p_value !== null) {
+        $p_value = implode(",", $data['p_value']);
     }
 
     $query = "SELECT id, email FROM users WHERE token = ?";
@@ -56,38 +57,6 @@
     $user_id = $user['id'];
     $email = $user['email'];
     $hash_user = md5($email);
-
-    // Initialize $dataset_id
-    $dataset_id = null;
-    
-    // Based on the parameters, extract the id from dataset_execution table
-    $sql = "SELECT id
-            FROM dataset_execution
-            WHERE name_of_dataset = ? 
-                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.features')) = ? 
-                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.target')) = ? 
-                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.k')) = ? 
-                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.distance')) = ? 
-                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.p')) = ? 
-                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.stratified_sampling')) = ?
-            LIMIT 1"; // Ensure only the first match is selected
-
-    // Prepare the statement
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("sssssss", $file, $features, $target, $k_value, $distance_value, $p_value, $stratify);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $dataset_id = $row['id'];
-    } else {
-        echo "No dataset execution found with these parameters. Try again";
-        exit;
-    }
-
-    // Close the statement
-    $stmt->close();
     
     // Determine file path based on folder type
     $filePath = '';
@@ -95,6 +64,25 @@
         $filePath = '../../python/public/datasets/' . $file;
     } else {
         $filePath = '../../python/private/' . $hash_user . '/' . 'datasets/' . $file;
+    }
+
+    if (!file_exists($filePath)) {
+        http_response_code(400);
+        echo json_encode(["message" => "File not found"]);
+        exit;
+    }
+
+    // Check if the model exists in dataset_execution table
+    $sql = "SELECT id FROM dataset_execution WHERE id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $dataset_id);
+    $stmt->execute();
+    $stmt->store_result();
+    
+    if ($stmt->num_rows === 0) {
+        http_response_code(400);
+        echo json_encode(["message" => "Model ID does not exist in dataset_execution"]);
+        exit;
     }
 
     // Check if the name already exists

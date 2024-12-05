@@ -309,7 +309,7 @@
                     </div>
                     <!-- Select all available features -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="selectAllFeatures">
+                        <input class="form-check-input" type="checkbox" value="" id="selectAllFeatures" checked>
                         <label class="form-check-label" for="selectAllFeatures">Select all</label>
                     </div>
                     <!-- Individual features -->
@@ -336,7 +336,7 @@
                             <p>Do you want k to be automated?</p>
                             <!-- k (automated value) -->
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="checkAutoK">
+                                <input class="form-check-input" type="checkbox" id="checkAutoK" checked>
                                 <label class="form-check-label" for="checkAutoK">Yes, I do</label>
                             </div>
                             <!-- k (specific value) -->
@@ -349,17 +349,16 @@
                             <!-- metric distance (specific value) -->
                             <div class="form-floating inline-param">
                                 <select class="form-select" id="metricDistance" name="metricDistance" data-bs-toggle="tooltip" title="The variable metric distance is the distance from one point to another. Must be one of Euclidean, Manhattan, Chebyshev or Minkowski (2 options: p=3 or p=4). Also, the distance can be automated (also 2 options: p=3 or p=4)">
-                                    <option value="default" selected disabled>Metric distance</option>
+                                    <option value="autoDistance" selected>Auto distance, with p=[3, 4]</option>
                                     <option value="euclidean">Euclidean</option>
                                     <option value="manhattan">Manhattan</option>
                                     <option value="chebyshev">Chebyshev</option>
                                     <option value="minkowski3">Minkowski, with p=3</option>
                                     <option value="minkowski4">Minkowski, with p=4</option>
-                                    <option value="autoDistance3">Automated distance, with p=3</option>
-                                    <option value="autoDistance4">Automated distance, with p=4</option>
                                 </select>  
                             </div>
                         </div>
+                        <!-- Stratified sampling option -->
                         <div class="sub-box" id="stratifiy">
                             <!-- Info -->
                             <div class="margin-top">
@@ -368,7 +367,7 @@
                             <p>Do you want to perform stratified sampling?</p>
                             <!-- Stratified sampling option -->
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="checkStratifiedSampling">
+                                <input class="form-check-input" type="checkbox" id="checkStratifiedSampling" checked>
                                 <label class="form-check-label" for="checkStratifiedSampling">Yes, I do</label>
                             </div>
                         </div>
@@ -456,13 +455,13 @@
                     <table id="avgMetricsTable" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="4">Average Metrics</th>
+                                <th colspan="4">Accuracy and Average Metrics</th>
                             </tr>
                             <tr>
-                                <th>Accuracy</th>
-                                <th>Precision</th>
-                                <th>Recall</th>
-                                <th>F-Score</th>
+                                <th>Max accuracy</th>
+                                <th>Average precision</th>
+                                <th>Average recall</th>
+                                <th>Average f-Score</th>
                             </tr>
                         </thead>
                         <tbody id="resultsavgMetricsTBody"></tbody>
@@ -476,13 +475,8 @@
                                 <th colspan="7">Best parameters</th>
                             </tr>
                             <tr>
-                                <th>Accuracy</th>
                                 <th>k</th>
                                 <th>Metric distance</th>
-                                <th>Precision</th>
-                                <th>Recall</th>
-                                <th>F-Score</th>
-                                <th>p</th>
                             </tr>
                         </thead>
                         <tbody id="resultsBestParmsTBody"></tbody>

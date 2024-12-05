@@ -21,13 +21,10 @@ $(document).ready(function() {
     // Initialize all the selected parameters and options of the user, so no previous data is shown
     $('#selectDataset').html('');
     $('#individualFeatures input[type="checkbox"]').prop('checked', false);
-    $('#selectAllFeatures').prop('checked', false);
     $('#selectClass').prop('selectedIndex', 0);
     $('#k').val('');
     $('#metricDistance').prop('selectedIndex', 0);
     $('#p').val('').prop('disabled', true);
-    $('#checkAutoK').prop('selectedIndex', 0);
-    $('#checkStratifiedSampling').prop('checked', false);
 
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -227,7 +224,7 @@ $(document).ready(function() {
         });
     });
 
-    // Global variables: chosen file, type of folder and the selected dataset
+    // Global variables: chosen file, type of folder, the selected dataset and the data counter (used later to determine the stratified sampling option)
     let selectedOption = null;
     let file = '';
     let folderType = '';
@@ -235,6 +232,7 @@ $(document).ready(function() {
         header: [],
         data: []
     };
+    let dataCounter = 0;
 
     // Event listener for dataset selection
     $('#selectDataset').on('change', function() {
@@ -300,6 +298,15 @@ $(document).ready(function() {
                         return;
                     }
 
+                    dataCounter = response.counter;
+                    console.log('Data counter: ', dataCounter);
+                    // If the dataset has less than 1000 rows, then don't show the #stratify div section (too small for stratified sampling choice)
+                    if (dataCounter < 1000) {
+                        $('#stratify').hide();
+                    } else {
+                        $('#stratify').show();
+                    }
+
                     dt = {
                         header: response.header,
                         data: response.data
@@ -350,7 +357,7 @@ $(document).ready(function() {
         numericalFeatures.forEach(feature => {
             formHtml += `
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input feature-checkbox" type="checkbox" value="${feature}" id="${feature}">
+                    <input class="form-check-input feature-checkbox" type="checkbox" value="${feature}" id="${feature}" checked>
                     <label class="form-check-label" for="${feature}">
                         ${feature}
                     </label>
@@ -555,13 +562,9 @@ $(document).ready(function() {
                 metricDistance = 'minkowski';
                 p = 4;
                 break;
-            case 'autoDistance3':
+            case 'autoDistance':
                 metricDistance = ['euclidean', 'manhattan', 'chebyshev', 'minkowski'];
-                p = 3;
-                break;
-            case 'autoDistance4':
-                metricDistance = ['euclidean', 'manhattan', 'chebyshev', 'minkowski'];
-                p = 4;
+                p = [3, 4];
                 break;
             case 'euclidean':
             case 'manhattan':
@@ -583,7 +586,11 @@ $(document).ready(function() {
         }
 
         // Save stratified sampling choice
-        stratifiedSampling = $('#checkStratifiedSampling').is(':checked');
+        if (dataCounter < 1000) {
+            stratifiedSampling = false;
+        } else {
+            stratifiedSampling = $('#checkStratifiedSampling').is(':checked');
+        }
     }
 
     $('#metricDistance, #k, #checkAutoK').on('change', function() {
@@ -643,9 +650,11 @@ $(document).ready(function() {
     let features = [];
     let k_value = [];
     let metricDistance_value = [];
+    let p_value = [];   
 
-    // Initialize dataset_id
-    let dataset_id = null;
+    // Initialize dataset_id and the folder of the results
+    let datasetId = null;
+    let resultsFolder = '';
 
     // Handler when the user presses the build model button
     $('#buildModelBtn').on('click', function() {
@@ -654,10 +663,14 @@ $(document).ready(function() {
 
         // Check if all inputs are valid
         if (validateInputs()) {
-            // Always pass these as arrays, even if there's only one element
+            // Always pass these as arrays, even if there's only one element (also check if p is null, if it's not, turn it into an array form)
             features = Array.isArray(selectedFeatures) ? selectedFeatures : [selectedFeatures];
             k_value = Array.isArray(k) ? k : [k];
             metricDistance_value = Array.isArray(metricDistance) ? metricDistance : [metricDistance];
+            
+            if (p !== null) {
+                p_value = Array.isArray(p) ? p : [p];
+            }
 
             $('#loadBuildModelBtn').hide();
             $('#dtProcessing').show();
@@ -672,46 +685,7 @@ $(document).ready(function() {
             console.log('p:', p);
             console.log('Stratified Sampling:', stratifiedSampling);
             
-            // API call on retrieving the results from the kNN algorithm
-            $.ajax({
-                url: '../server/php/api/get_knn_train_test.php',
-                method: 'GET',
-                data: {
-                    token: token,
-                    file: file,
-                    features: features,
-                    target: selectedClass,
-                    k_value: k_value,
-                    distance_value: metricDistance_value,
-                    p_value: p,
-                    stratify: stratifiedSampling
-                },
-                contentType: 'application/json',
-                success: function(results) {
-                    // If results are available, display them and change the status to "Completed"
-                    if (results) {
-                        showAlert('success', 'Model built successfully. Press "Show Evaluation" to see the results.', '#alertBuildModel');
-                        $('#processStatus').text('Completed');
-                        $('#evaluateBtn').prop('disabled', false);
-                        $('#saveModelBtn').prop('disabled', false);
-                        displayResults(results);
-                    } else {
-                        // If no results, execute the algorithm
-                        executeAlgorithm();
-                    }
-                },
-                error: function(error, xhr, status) {
-                    console.log('Error starting the algorithm:', error);
-                    console.log('XHR object:', xhr);
-                    console.log('Status:', status);
-                    showAlert('success', 'Execution of kNN starts now! Wait until the status changes to "Completed".', '#alertBuildModel');
-                    executeAlgorithm();
-                }
-            });
-        } else {
-            // If validation fails, enable the button again and hide the loading spinner
-            $('#buildModelBtn').prop('disabled', false);
-            $('#loadBuildModelBtn').hide();
+            executeAlgorithm();
         }
     });
 
@@ -734,12 +708,13 @@ $(document).ready(function() {
             }),
             contentType: 'application/json',
             success: function(response) {
-                if (response.message === "Completed execution of algorithm") {
+                if (response.message === "Completed execution of algorithm" || response.message === "Algorithm already executed") {
                     // Fetch and display the results immediately after execution
                     $('#buildModelBtn').prop('disabled', false);
                     $('#processStatus').text(response.status);
-                    dataset_id = response.dataset_id;
-                    fetchResults(dataset_id);
+                    datasetId = response.dataset_id;
+                    resultsFolder = response.folder;
+                    fetchResults(datasetId);
                 } else {
                     // Show warning if something went wrong
                     $('#buildModelBtn').prop('disabled', false);
@@ -760,21 +735,15 @@ $(document).ready(function() {
     }
 
     // Function to fetch and display the results
-    function fetchResults(dataset_id) {
+    function fetchResults(datasetId) {
         // API call on retrieving the results from the kNN algorithm
         $.ajax({
             url: '../server/php/api/get_knn_train_test.php',
             method: 'GET',
             data: {
                 token: token,
-                file: file,
-                features: features,
-                datasetId: dataset_id,
-                target: selectedClass,
-                k_value: k_value,
-                distance_value: metricDistance_value,
-                p_value: p,
-                stratify: stratifiedSampling
+                dataset_id: datasetId,
+                folder: resultsFolder
             },
             contentType: 'application/json',
             success: function(results) {
@@ -822,7 +791,7 @@ $(document).ready(function() {
         avgMetricsTBody.empty();
         avgMetricsTBody.append(
             `<tr>
-                <td>${results.average_accuracy.toFixed(2)}</td>
+                <td>${results.max_accuracy.toFixed(2)}</td>
                 <td>${results.average_precision.toFixed(2)}</td>
                 <td>${results.average_recall.toFixed(2)}</td>
                 <td>${results.average_f1.toFixed(2)}</td>
@@ -834,13 +803,8 @@ $(document).ready(function() {
         bestParmsTBody.empty();
         bestParmsTBody.append(
             `<tr>
-                <td>${results.max_accuracy.toFixed(2)}</td>
-                <td>${results.best_k}</td>
-                <td>${results.best_distance}</td>
-                <td>${results.best_precision.toFixed(2)}</td>
-                <td>${results.best_recall.toFixed(2)}</td>
-                <td>${results.best_f1.toFixed(2)}</td>
-                <td>${results.best_p || 'None'}</td>
+                <td>${best_k}</td>
+                <td>${best_distance} (p=${best_p || 'None'})</td>
             </tr>`
         );
     }
@@ -877,7 +841,8 @@ $(document).ready(function() {
         var requestData = JSON.stringify({
             token: token,
             file: file,
-            folder: folderType,
+            dataset_id: datasetId,
+            folder: resultsFolder,
             features: features,
             target: selectedClass,
             k_value: k_value,

@@ -35,7 +35,7 @@ distance_values = sys.argv[5].split(",")  # Comma-separated string -> list
 
 p_value = sys.argv[6] if sys.argv[6] and sys.argv[6] != 'null' else None
 if p_value:
-    p_value = int(p_value)  # Convert to integer if it's not None
+    p_value = [int(p) for p in sys.argv[6].split(",")]  # Convert to list of integers
 
 stratified_sampling = sys.argv[7].lower() == 'true'  # Convert to boolean
 results_path = sys.argv[8]
@@ -54,14 +54,8 @@ num_classes = len(set(y_train))
 
 # Check if stratified sampling is needed
 if stratified_sampling:
-    # Calculate the maximum number of samples to use
-    if len(X_train) > 1000:
-        train_size = 1000
-    else:
-        train_size = len(X_train) - num_classes  # Leave at least one sample per class for the test set
-
     # Perform stratified sampling on the training set
-    X_sampled, _, y_sampled, _ = train_test_split(X_train, y_train, train_size=train_size, random_state=42, stratify=y_train)
+    X_sampled, _, y_sampled, _ = train_test_split(X_train, y_train, train_size=1000, random_state=42, stratify=y_train)
 else:
     X_sampled, y_sampled = X_train, y_train
 
@@ -87,8 +81,9 @@ label_metrics = {label: {'precision': 0, 'recall': 0, 'f1': 0, 'count': 0} for l
 # Evaluate different combinations
 for k in k_values:
     for distance in distance_values:
-        if distance == 'minkowski' and p_value:
-            accuracy, precision, recall, f1, class_report = evaluate_knn(X_sampled, y_sampled, X_test, y_test, k, distance, p_value)
+        if distance == 'minkowski':
+            for p in p_value:
+                accuracy, precision, recall, f1, class_report = evaluate_knn(X_sampled, y_sampled, X_test, y_test, k, distance, p)
         else:
             accuracy, precision, recall, f1, class_report = evaluate_knn(X_sampled, y_sampled, X_test, y_test, k, distance)
 

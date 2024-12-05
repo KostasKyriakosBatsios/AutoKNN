@@ -71,11 +71,13 @@
         exit;
     }
 
-    // Process the file contents (assumed to be CSV for this example)
+    // Process the file contents (assumed to be CSV for this example), and add a counter variable, that counts the rows of data added to data[]
+    $counter = 0;
     $data = [];
     $header = str_getcsv(array_shift($fileContents));
     foreach ($fileContents as $line) {
         $data[] = str_getcsv($line);
+        $counter++;
     }
 
     // Close database connection
@@ -84,6 +86,7 @@
     echo json_encode([
         "status" => "success",
         "header" => $header,
-        "data" => $data
+        "data" => $data,
+        "counter" => $counter
     ]);
 ?>

@@ -30,7 +30,13 @@
    $target = $data['target'];
    $k_value = implode(",", $data['k_value']);
    $distance_value = implode(",", $data['distance_value']);
+
+   // Check if $p_value is being passed as null, if so, set it to null, else set it like $k_value
    $p_value = $data['p_value'];
+   if ($p_value !== null) {
+        $p_value = implode(",", $data['p_value']);
+   }
+   
    $stratify = $data['stratify'] ? 'true' : 'false';
    
    // Validate the user token
@@ -66,6 +72,58 @@
        exit;
    }
    
+   // Initialize $dataset_id, and run a query to see if there's a file with the same parameters the user passed
+   $dataset_id = null;
+   $sql = "SELECT id
+            FROM dataset_execution
+            WHERE name_of_dataset = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.features')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.target')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.k')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.distance')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.p')) = ? 
+                AND JSON_UNQUOTE(JSON_EXTRACT(parameters, '$.stratified_sampling')) = ?
+            LIMIT 1"; // Ensure only the first match is selected
+
+    // Prepare the statement
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("sssssss", $file, $features, $target, $k_value, $distance_value, $p_value, $stratify);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $dataset_id = $row['id'];
+    }
+
+    $stmt->close();
+
+    // If the dataset id is not null, search at both directories the existence of that file (for example, if dataset id is 16, the JSON file is 16.json)
+    if ($dataset_id !== null) {
+        $jsonFilePathPublic = '../../python/public/models_json/' . $dataset_id . '.json';
+        $jsonFilePathPrivate = '../../python/private/' . $hash_user . '/' . 'models_json/' . $dataset_id . '.json';
+        $folderFound = '';
+
+        // Check if the file exists in both directories, and exit the program
+        if (file_exists($jsonFilePathPublic)) {
+            echo json_encode([
+                "message" => "Algorithm already executed",
+                "dataset_id" => $dataset_id,
+                "folder" => 'public',
+                "status" => 'Completed'
+            ]);
+            exit;
+        } else if (file_exists($jsonFilePathPrivate)) {
+            echo json_encode([
+                "message" => "Algorithm already executed",
+                "dataset_id" => $dataset_id,
+                "folder" => 'private',
+                "status" => 'Completed'
+            ]);
+            exit;
+        }
+    }
+
    // Prepare JSON for the parameters
    $parametersArray = json_encode([
        "features" => $features,
@@ -146,6 +204,7 @@
        echo json_encode([
            "message" => "Completed execution of algorithm",
            "dataset_id" => $dataset_id,
+           "folder" => $folder,
            "status" => $status
        ]);
    } else {
