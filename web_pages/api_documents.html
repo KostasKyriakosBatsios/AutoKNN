@@ -760,13 +760,24 @@
     "target": "selectedClass",
     "k_value": [k_value] or [1,...,50],
     "distance_value": ["metricDistance_value"] or ["euclidean", "manhattan", "chebyshev", "minkowski"],
-    "p_value": null or 3 or 4,
+    "p_value": [] or [3] or [4] or [3, 4],
     "stratify": true or false
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
                                             <pre>
-{"message":"Completed execution of algorithm","status":"Completed"}
+{
+    "message": "Algorithm already executed",
+    "dataset_id": "executed_dataset_id",
+    "folder": "folder_with_results",
+    "status": "Completed"
+} or 
+{
+    "message": "Completed execution of algorithm",
+    "dataset_id": "generated_executed_dataset_id",
+    "folder": "folder_with_results",
+    "status": "Completed" or "Failed"
+}
                                             </pre>
                                         </div>
                                     </div>
@@ -779,14 +790,9 @@
                                             <p>This endpoint is used to retrieve the results of the KNN algorithm (either before executing it, if it already exists, or after execution). Example of the <strong>request body:</strong> </p>
                                             <pre>
 {
+    "dataset_id": "executed_dataset_id",
     "token": "your_token",
-    "file": "selected_dataset.csv",
-    "features": ["selected_feature1", "selected_feature2", "selected_feature3", "..."],
-    "target": "selectedClass",
-    "k_value": [k_value] or [1,...,50],
-    "distance_value": ["metricDistance_value"] or ["euclidean", "manhattan", "chebyshev", "minkowski"],
-    "p_value": null or 3 or 4,
-    "stratify": true or false
+    "folder": "folder_of_executed_dataset"
 }
                                             </pre>
                                             <p>Example of the <strong>response body:</strong></p>
@@ -813,7 +819,7 @@
         "chebyshev",
         "minkowski"
     ],
-    "p_value": null or 3 or 4,
+    "p_value": [] or [3] or [4] or [3, 4],
     "stratified_sampling": true or false,
     "best_k": result_of_best_k,
     "best_distance": "result_of_best_metricDistance",
@@ -861,12 +867,13 @@
 {
     "token": "your_token",
     "file": "selected_dataset.csv",
-    "folder": "folder_of_selected_dataset",
+    "dataset_id": "executed_dataset_id",
+    "folder": "folder_with_results",
     "features": ["selected_feature1", "selected_feature2", "selected_feature3", "..."],
     "target": "selectedClass",
     "k_value": [k_value] or [1,...,50],
     "distance_value": ["metricDistance_value"] or ["euclidean", "manhattan", "chebyshev", "minkowski"],
-    "p_value": null or 3 or 4,
+    "p_value": [] or [3] or [4] or [3, 4],
     "best_k": result_of_best_k,
     "best_distance": "result_of_best_metricDistance",
     "best_p": result_of_best_p,
@@ -945,27 +952,31 @@
                 "selected_model_feature2",
                 "selected_model_feature3",
                 ...,
+                "name_of_class",
                 "predicted"
             ],
             [
                 5.1,
                 3.5,
                 1.4,
-                0.2,
+                ..,
+                "selected_dataset_class_label1",
                 "selected_model_class_label1"
             ],
             [
                 4.9,
                 3,
                 1.4,
-                0.2,
+                ...,
+                "selected_dataset_class_label2",
                 "selected_model_class_label2"
             ],
             [
                 4.7,
                 3.2,
                 1.3,
-                0.2,
+                ...,
+                "selected_dataset_class_label3",
                 "selected_model_class_label3"
             ],
             ...

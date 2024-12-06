@@ -20,11 +20,9 @@ $(document).ready(function() {
 
     // Initialize all the selected parameters and options of the user, so no previous data is shown
     $('#selectDataset').html('');
-    $('#individualFeatures input[type="checkbox"]').prop('checked', false);
     $('#selectClass').prop('selectedIndex', 0);
     $('#k').val('');
     $('#metricDistance').prop('selectedIndex', 0);
-    $('#p').val('').prop('disabled', true);
 
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -251,29 +249,23 @@ $(document).ready(function() {
             $('#parameters').show();
             $('#dtProcessing').hide();
             $('#modelEvaluation').hide();
-            $('#individualFeatures input[type="checkbox"]').prop('checked', false);
-            $('#selectAllFeatures').prop('checked', false);
+            $('#selectAllFeatures').prop('checked', true);
             $('#selectClass').prop('selectedIndex', 0);
             $('#k').val('');
             $('#metricDistance').prop('selectedIndex', 0);
-            $('#p').val('').prop('disabled', true);
-            $('#checkAutoK').prop('selectedIndex', 0);
-            $('#checkStratifiedSampling').prop('checked', false);
+            $('#checkAutoK').prop('checked', true);
         } else {
-            $('#dnloadBtn').prop('disabled', true);
-            $('#delBtn').prop('disabled', true);
+            $('#dnloadBtn').prop('disabled', false);
+            $('#delBtn').prop('disabled', false);
             $('#tableDt').hide();
             $('#parameters').hide();
             $('#dtProcessing').hide();
             $('#modelEvaluation').hide();
-            $('#individualFeatures input[type="checkbox"]').prop('checked', false);
             $('#selectAllFeatures').prop('checked', false);
             $('#selectClass').prop('selectedIndex', 0);
             $('#k').val('');
             $('#metricDistance').prop('selectedIndex', 0);
-            $('#p').val('').prop('disabled', true);
-            $('#checkAutoK').prop('selectedIndex', 0);
-            $('#checkStratifiedSampling').prop('checked', false);
+            $('#checkAutoK').prop('checked', false);
         }
 
         if (file && token) {
@@ -291,35 +283,44 @@ $(document).ready(function() {
                 success: function(response) {
                     // Hide loading button
                     $('#loadDatasetBtn').hide();
-
+                
                     if (response.message) {
                         // Show alert if there's a message
                         showAlert('danger', response.message, '#alertPreview');
                         return;
                     }
-
+                
                     dataCounter = response.counter;
-                    console.log('Data counter: ', dataCounter);
-                    // If the dataset has less than 1000 rows, then don't show the #stratify div section (too small for stratified sampling choice)
+                
+                    // Show or hide stratified sampling based on dataCounter
                     if (dataCounter < 1000) {
                         $('#stratify').hide();
+                        $('#checkStratifiedSampling').prop('checked', false);
                     } else {
                         $('#stratify').show();
+                        $('#checkStratifiedSampling').prop('checked', true);
                     }
-
+                
                     dt = {
                         header: response.header,
                         data: response.data
-                    }
-                    
-                    // Filter and display numerical features with no missing values, and display classes on the select class tag
+                    };
+                
+                    // Filter and display numerical features with no missing values, and display classes
                     filterAndDisplayNumericalFeatures();
                     populateClassesSelect();
-
+                
                     // Populate table with dataset contents
                     populateTable(dt.header, dt.data);
-
+                
                     $('#parameters').show();
+                
+                    // Update global variables after the UI has been updated
+                    updateSelectedFeatures();
+                    updateSelectedClass();
+                
+                    // Handle parameter settings after all relevant data is loaded
+                    handleParameterSettings();
                 },
                 error: function(error, xhr, status) {
                     console.log('Error starting the algorithm:', error);
@@ -586,11 +587,7 @@ $(document).ready(function() {
         }
 
         // Save stratified sampling choice
-        if (dataCounter < 1000) {
-            stratifiedSampling = false;
-        } else {
-            stratifiedSampling = $('#checkStratifiedSampling').is(':checked');
-        }
+        stratifiedSampling = $('#checkStratifiedSampling').is(':checked');
     }
 
     $('#metricDistance, #k, #checkAutoK').on('change', function() {
@@ -601,28 +598,22 @@ $(document).ready(function() {
         handleParameterSettings();
     });
 
-    // Initial call to set up the form based on current selections
-    handleParameterSettings();
-
     // Checking the validity of the inputs to ensure the building model will be proper
     function validateInputs() {
         $('#alertBuildModel').html('');
 
         if (selectedFeatures.length === 0) {
-            console.log('No features selected.');
             showAlert('warning', 'You need to select features.', '#alertBuildModel');
             return false;
         }
     
         if (selectedClass === 'default' || selectedClass.trim() === '') {
-            console.log('No class selected.');
             showAlert('warning', 'You need to select a class.', '#alertBuildModel');
             return false;
         }
     
         const validK = (Array.isArray(k)) || (!isNaN(k) && k >= 1 && k <= 50);
         if (!validK) {
-            console.log('k is not a valid value.');
             showAlert('warning', 'You need to enter a valid value for k (between 1 and 50 or a valid range).', '#alertBuildModel');
             return false;
         }
@@ -631,15 +622,14 @@ $(document).ready(function() {
         const isValidDistance = (typeof metricDistance === 'string' && validDistances.includes(metricDistance)) || 
                                 (Array.isArray(metricDistance) && metricDistance.every(distance => validDistances.includes(distance)));
         if (!isValidDistance) {
-            console.log('metricDistance is not a valid value.');
             showAlert('warning', 'You need to select a valid metric distance.', '#alertBuildModel');
             return false;
         }
-    
+        
         const isMinkowski = metricDistance === 'minkowski' || (Array.isArray(metricDistance) && metricDistance.includes('minkowski'));
-        if (isMinkowski && (p === null || isNaN(p) || (p !== 3 && p !== 4))) {
-            console.log('p is not a valid value when using Minkowski distance.');
-            showAlert('warning', 'You need to enter a valid value for p (3 or 4) when using Minkowski distance.', '#alertBuildModel');
+        const validP = (Array.isArray(p) && p.length === 2 && p.includes(3) && p.includes(4)) || p === 3 || p === 4;
+        if (isMinkowski && (!p || !validP)) {
+            showAlert('warning', 'You need to enter a valid value for p (3 or 4, or both [3, 4]) when using Minkowski distance.', '#alertBuildModel');
             return false;
         }
     
@@ -650,7 +640,7 @@ $(document).ready(function() {
     let features = [];
     let k_value = [];
     let metricDistance_value = [];
-    let p_value = [];   
+    let p_value = [] || null;   
 
     // Initialize dataset_id and the folder of the results
     let datasetId = null;
@@ -682,10 +672,14 @@ $(document).ready(function() {
             console.log('Class:', selectedClass);
             console.log('k:', k_value);
             console.log('Metric Distance:', metricDistance_value);
-            console.log('p:', p);
+            console.log('p:', p_value);
             console.log('Stratified Sampling:', stratifiedSampling);
             
             executeAlgorithm();
+            $('#loadBuildModelBtn').hide();
+        } else {
+            $('#buildModelBtn').prop('disabled', false);
+            $('#loadBuildModelBtn').hide();
         }
     });
 
@@ -703,7 +697,7 @@ $(document).ready(function() {
                 target: selectedClass,
                 k_value: k_value,
                 distance_value: metricDistance_value,
-                p_value: p,
+                p_value: p_value,
                 stratify: stratifiedSampling
             }),
             contentType: 'application/json',
@@ -801,12 +795,22 @@ $(document).ready(function() {
         // Display best parameters
         let bestParmsTBody = $('#resultsBestParmsTBody');
         bestParmsTBody.empty();
-        bestParmsTBody.append(
-            `<tr>
-                <td>${best_k}</td>
-                <td>${best_distance} (p=${best_p || 'None'})</td>
-            </tr>`
-        );
+
+        if (best_p === null) {
+            bestParmsTBody.append(
+                `<tr>
+                    <td>${best_k}</td>
+                    <td>${best_distance}</td>
+                </tr>`
+            );
+        } else {
+            bestParmsTBody.append(
+                `<tr>
+                    <td>${best_k}</td>
+                    <td>${best_distance} (p=${best_p})</td>
+                </tr>`
+            );
+        }
     }
     
     // When pressed the button, make the model evaluation window appear

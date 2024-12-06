@@ -309,7 +309,7 @@
                     </div>
                     <!-- Select all available features -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="selectAllFeatures" checked>
+                        <input class="form-check-input" type="checkbox" value="" id="selectAllFeatures">
                         <label class="form-check-label" for="selectAllFeatures">Select all</label>
                     </div>
                     <!-- Individual features -->
@@ -326,7 +326,7 @@
                 </div>
                 <div class="sub-box">
                     <h2>Parameters' form</h2>
-                    <!-- Form for k, distance, p -->
+                    <!-- Form for k, distance -->
                     <form action="#">
                         <div class="sub-box" id="parametersSpecific">
                             <!-- Info -->
@@ -336,7 +336,7 @@
                             <p>Do you want k to be automated?</p>
                             <!-- k (automated value) -->
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="checkAutoK" checked>
+                                <input class="form-check-input" type="checkbox" id="checkAutoK">
                                 <label class="form-check-label" for="checkAutoK">Yes, I do</label>
                             </div>
                             <!-- k (specific value) -->
@@ -359,15 +359,15 @@
                             </div>
                         </div>
                         <!-- Stratified sampling option -->
-                        <div class="sub-box" id="stratifiy">
+                        <div class="sub-box" id="stratify">
                             <!-- Info -->
                             <div class="margin-top">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="It's a process that chooses let's say from 20000 records that a dataset might have trained and tested, it chooses 1k-2k to perform kNN. It saves time.">Stratified Sampling option (recommended): </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="An option, when the selected dataset has at least 1000 data. If selected, it'll perform stratified sampling for 1000 samples of the training set. It helps kNN to perform better and faster.">Stratified Sampling option (recommended): </button>
                             </div>
                             <p>Do you want to perform stratified sampling?</p>
                             <!-- Stratified sampling option -->
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="checkStratifiedSampling" checked>
+                                <input class="form-check-input" type="checkbox" id="checkStratifiedSampling">
                                 <label class="form-check-label" for="checkStratifiedSampling">Yes, I do</label>
                             </div>
                         </div>
@@ -469,10 +469,10 @@
                 </div>
                 <!-- Best parameters table -->
                 <div id="thirdTable" class="table-responsive">
-                    <table id="bestParmsTable" class="table table-bordered">
+                    <table id="bestParmsTable" class="table table-bordered text-center">
                         <thead>
                             <tr>
-                                <th colspan="7">Best parameters</th>
+                                <th colspan="2">Best parameters</th>
                             </tr>
                             <tr>
                                 <th>k</th>
@@ -486,7 +486,7 @@
                 <div class="d-grid d-flex">
                     <!-- Naming the model -->
                     <div class="form-floating inline-param">
-                        <input type="text" id="modelName" class="form-control" data-bs-toggle="tooltip" title="The name of the model must be followed by at least 1 letter and optionally a number." required>
+                        <input type="text" id="modelName" class="form-control" placeholder="Model's name" data-bs-toggle="tooltip" title="The name of the model must be followed by at least 1 letter and optionally a number." required>
                         <label for="modelName">
                             <span class="field-text">Model's name</span>
                         </label>

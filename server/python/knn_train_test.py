@@ -68,12 +68,13 @@ best_precision = 0
 best_recall = 0
 best_f1 = 0
 
-# Variables to calculate the average metrics
+# Variables to calculate the weighted averages across all classes
 average_accuracy = 0
-average_precision = 0
-average_recall = 0
-average_f1 = 0
 total_evaluations = 0
+total_precision_sum = 0
+total_recall_sum = 0
+total_f1_sum = 0
+total_classes_count = 0
 
 # Store per-label metrics
 label_metrics = {label: {'precision': 0, 'recall': 0, 'f1': 0, 'count': 0} for label in set(y_test)}
@@ -97,26 +98,31 @@ for k in k_values:
             best_f1 = f1
             best_class_metrics = class_report
         
-        # Accumulate average metrics
+        # Accumulate overall metrics
         average_accuracy += accuracy
-        average_precision += precision
-        average_recall += recall
-        average_f1 += f1
         total_evaluations += 1
 
         # Accumulate per-label metrics
         for label, metrics in class_report.items():
             if label not in ['accuracy', 'macro avg', 'weighted avg']:
+                total_precision_sum += metrics['precision']
+                total_recall_sum += metrics['recall']
+                total_f1_sum += metrics['f1-score']
+                total_classes_count += 1
+
+                # Update per-label metrics for final report
                 label_metrics[label]['precision'] += metrics['precision']
                 label_metrics[label]['recall'] += metrics['recall']
                 label_metrics[label]['f1'] += metrics['f1-score']
                 label_metrics[label]['count'] += 1
 
-# Finalize average metrics
+# Finalize averages
 average_accuracy /= total_evaluations
-average_precision /= total_evaluations
-average_recall /= total_evaluations
-average_f1 /= total_evaluations
+
+# Calculate the averages based on all classes
+average_precision = total_precision_sum / total_classes_count if total_classes_count > 0 else 0
+average_recall = total_recall_sum / total_classes_count if total_classes_count > 0 else 0
+average_f1 = total_f1_sum / total_classes_count if total_classes_count > 0 else 0
 
 # Calculate average per-label metrics
 label_metrics_final = []
