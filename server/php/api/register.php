@@ -101,13 +101,9 @@
     $alt_body = "To complete your registration, visit: $app_domain/web_pages/verify_account.html?verification_key=$verification_key";
 
     try {
-        error_log("Step: Attempting to send verification email.");
         send_email($email, $fname, $subject, $body, $alt_body);
-        error_log("Email sent successfully.");
     } catch (Exception $e) {
-        error_log("Error sending email: " . $e->getMessage());
         echo json_encode(["status" => "danger", "message" => "Failed to send verification email: " . $e->getMessage()]);
-        exit;
     }
 
     echo json_encode(["status" => "success", "message" => "Registration successful. Verification email sent."]);

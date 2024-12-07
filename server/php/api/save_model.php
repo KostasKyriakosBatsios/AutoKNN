@@ -85,6 +85,8 @@
         exit;
     }
 
+    $stmt->close();
+
     // Check if the name already exists
     $sql = "SELECT * FROM models WHERE name_of_model = ?";
     $stmt = $mysqli->prepare($sql);
@@ -94,7 +96,7 @@
     $stmt->close();
     
     if ($result->num_rows > 0) {
-        http_response_code(409); // Conflict status code
+        http_response_code(409);
         echo json_encode(["message" => "A model with this name already exists. Please choose a different name."]);
         exit;
     }
@@ -110,7 +112,7 @@
 
     // Check if the model name already exists
     if (file_exists($savedModelFilePath)) {
-        http_response_code(409); // Conflict status code
+        http_response_code(409);
         echo json_encode(["message" => "A model with this name already exists. Please choose a different name."]);
         exit;
     }

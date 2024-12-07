@@ -26,7 +26,7 @@
 
     // Check if the verification key is expired
     $email = checkVerificationKey($verification_key);
-    if (!$email) {
+    if ($email) {
         http_response_code(400);
         echo json_encode(['status' => 'danger', 'message' => 'Invalid verification key.']);
         exit;

@@ -16,7 +16,7 @@
         global $mysqli;
 
         // Check if the verification key has expired (10 minutes have passed)
-        $sql = "SELECT * FROM verify_account WHERE verification_key = ? AND creation_time <= (NOW() - INTERVAL 10 MINUTE)";
+        $sql = "SELECT * FROM verify_account WHERE verification_key = ? AND creation_time < (NOW() - INTERVAL 10 MINUTE)";
         $stmt = $mysqli->prepare($sql);
         $stmt->bind_param("s", $verification_key);
         $stmt->execute();
@@ -24,9 +24,9 @@
         $expiredData = $result->fetch_assoc();
         $stmt->close();
 
-        // If expired, retrieve email
+        // If the verification key is expired, retrieve email
         if ($expiredData) {
-            $sql = "SELECT u.email FROM users u JOIN verify_account va ON u.id = va.id WHERE va.verification_key = ?";
+            $sql = "SELECT u.email FROM users u JOIN verify_account va ON u.id = va.id WHERE va.verification_key = ? AND va.creation_time < (NOW() - INTERVAL 10 MINUTE)";
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
                 return null;
@@ -41,7 +41,7 @@
             return $email; // Return email only if expired
         }
 
-        // Return null if not expired or doesn't exist
+        // Return null if the verification key is not expired or doesn't exist
         return null;
     }
 

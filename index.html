@@ -278,8 +278,8 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h2>Create New Model</h2>
-                                            <p>In this section, users can select an existing dataset or upload their own. After uploading, they can normalize the data, choose parameters, and execute the k-NN algorithm. Once executed, an evaluation appears, displaying metrics per class, average metrics, and the best parameters. To save the model, enter its name and click 'Save model'.</p>
-                                            <p>The picture on top, shows the half top of the evaluation window, in which includes the 'Metrics per Class' and the 'Average Metrics' tables.</p>
+                                            <p>In this section, users can select an existing dataset or upload their own. After uploading, they can normalize the data, choose parameters, and execute the k-NN algorithm. Once executed, an evaluation appears, displaying metrics per class, max accuracy and average metrics, and the best parameters. To save the model, enter its name and click 'Save model'.</p>
+                                            <p>The picture on top, shows the half top of the evaluation window, in which includes the 'Metrics per Class' and the 'Accuracy and Average Metrics' tables.</p>
                                         </div>
                                         <div class="col-md-12">
                                             <img src="./source/image/evaluation1.png" alt="model evaluation" class="img-fluid">
@@ -299,16 +299,18 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h2>Pretrained Models</h2>
-                                            <p>Previously built models appear here. Users can select a pretrained model and apply it to an unclassified dataset (which must match the class and features of the selected model) to predict class values. This process provides both average and per-class metrics, and results can be exported in CSV format.</p>
+                                            <p>Previously built models appear here. Users can select a pretrained model and apply it to an unclassified dataset to predict class values. If the dataset contains a class column, then this displays the dataset with columns the features the user selected, the class and the predicted class process, and also provides both average and per-class metrics, and the classified dataset can be exported in CSV format. If the dataset does not contain a class column, then it displays only the dataset with columns the features the user selected and the predicted class and the classified dataset can be exported in CSV format.</p>
                                             <p>The picture on top, shows the half top of the classified dataset window, in which includes the 'Metrics per Class' table (to see the table, the show buttom must be clicked) and the info button.</p>
                                         </div>
                                         <div class="col-md-12">
+                                            <img src="./source/image/classify1.png" alt="model evaluation" class="img-fluid">
                                             <img src="./source/image/classify1.png" alt="model evaluation" class="img-fluid">
                                         </div>
                                         <div class="col-md-12">
                                             <p>The picture below the top, is the other half of the classified dataset window, in which shows the 'Average Metrics' table (to see the table, the show button must be clicked) and the 'Export to .csv' button.</p>
                                         </div>
                                         <div class="col-md-12">
+                                            <img src="./source/image/classify2.png" alt="model evaluation" class="img-fluid">
                                             <img src="./source/image/classify2.png" alt="model evaluation" class="img-fluid">
                                         </div>
                                     </div>

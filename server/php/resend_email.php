@@ -71,10 +71,7 @@
     $sql = "INSERT INTO verify_account(id, verification_key) VALUES (?, ?)";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("is", $userId, $verification_key);
-    if (!$stmt->execute()) {
-        echo json_encode(["status" => "danger", "message" => "Failed to update verification key: " . $stmt->error]);
-        exit;
-    }
+    $stmt->execute();
     $stmt->close();
 
     // Prepare email for verification

@@ -91,7 +91,12 @@ $(document).ready(function() {
                 console.log('Error starting the algorithm:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
-                showAlert('danger', 'Failed to load datasets.', '#alertDatasets');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+                
+                showAlert('danger', message, '#alertDatasets');
             }
         });
     }
@@ -217,7 +222,12 @@ $(document).ready(function() {
                 // Show the upload button and hide the loading button
                 $('#uploadDtBtn').show();
                 $('#loadUploadingDatasetBtn').hide();
-                showAlert('danger', jqXHR.responseJSON.message, '#alertUploadModal');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertUploadModal');
             }
         });
     });
@@ -328,7 +338,12 @@ $(document).ready(function() {
                     console.log('Status:', status);
                     // Hide loading button
                     $('#loadDatasetBtn').hide();
-                    showAlert('danger', 'An error occurred while loading the dataset.', '#alertPreview');
+
+                    // Display specific error message from the server response
+                    const response = xhr.responseJSON;
+                    const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                    showAlert('danger', message, '#alertPreview');
                 }
             });
         }
@@ -491,8 +506,11 @@ $(document).ready(function() {
                 $('#delBtn').show();
                 $('#loadDelBtn').hide();
 
-                // Show error alert
-                showAlert('danger', jqXHR.responseJSON.message, '#alertDelModal');
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+                
+                showAlert('danger', message, '#alertDelModal');
             }
         });
     });
@@ -666,15 +684,9 @@ $(document).ready(function() {
             $('#dtProcessing').show();
             $('#datasetName').text(file);
             $('#processStatus').text('In progress');
-
-            // Console log the parameters
-            console.log('Features:', features);
-            console.log('Class:', selectedClass);
-            console.log('k:', k_value);
-            console.log('Metric Distance:', metricDistance_value);
-            console.log('p:', p_value);
-            console.log('Stratified Sampling:', stratifiedSampling);
             
+            showAlert('warning', 'Parameters are valid. Wait until the status changes to "Completed".', '#alertBuildModel');
+
             executeAlgorithm();
             $('#loadBuildModelBtn').hide();
         } else {
@@ -755,7 +767,12 @@ $(document).ready(function() {
                 console.log('Error starting the algorithm:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
-                showAlert('danger', 'Failed to retrieve the results.', '#alertBuildModel');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertBuildModel');
             }
         });
     }
@@ -865,7 +882,7 @@ $(document).ready(function() {
             method: 'POST',
             data: requestData,
             contentType: 'application/json',
-            success: function(response) {
+            success: function() {
                 $('#saveModelBtn').show();
                 $('#loadSaveModelBtn').hide();
                 showAlert('success', 'Model saved successfully.', '#alertEvaluation');
@@ -876,7 +893,12 @@ $(document).ready(function() {
                 console.log('Status:', status);
                 $('#saveModelBtn').show();
                 $('#loadSaveModelBtn').hide();
-                showAlert('danger', 'Failed to save the model.', '#alertEvaluation');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertEvaluation');
             }
         });
     });
