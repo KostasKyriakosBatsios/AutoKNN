@@ -133,7 +133,7 @@
 
         <!-- Uploading, choosing, downloading and deleting a dataset -->
         <div id="dt">
-            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 65%;">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 75%;">
                 <!-- Alert -->
                 <div class="container mt-1" id="alertDatasets"></div>
                 <h1>Datasets</h1>
@@ -164,12 +164,12 @@
                         <!-- Download -->
                         <div id="dnloadDataset">
                             <!-- Download button -->
-                            <button class="btn btn-primary btn-lg" type="button" id="dnloadBtn" disabled>
+                            <button class="btn btn-primary btn-md" type="button" id="dnloadBtn" disabled>
                                 <i><ion-icon name="download-outline"></ion-icon></i><span>Download</span>
                             </button>
                             <!-- Loading button -->
                             <div class="d-grid margin-top">
-                                <button class="btn btn-primary btn-lg" id="loadDnloadBtn" disabled>
+                                <button class="btn btn-primary btn-md" id="loadDnloadBtn" disabled>
                                     <span class="spinner-grow spinner-grow-sm"></span>
                                     Loading..
                                 </button>
@@ -178,12 +178,12 @@
                         <!-- Delete -->
                         <div id="delDataset">
                             <!-- Delete button -->
-                            <button class="btn btn-danger btn-lg" type="button" id="delBtn" data-bs-toggle="modal" data-bs-target="#delModal" disabled>
+                            <button class="btn btn-danger btn-md" type="button" id="delBtn" data-bs-toggle="modal" data-bs-target="#delModal" disabled>
                                 <i><ion-icon name="trash-outline"></ion-icon></i><span>Delete</span>
                             </button>
                             <!-- Loading button -->
                             <div class="d-grid margin-top">
-                                <button class="btn btn-danger btn-lg" id="loadDelBtn" disabled>
+                                <button class="btn btn-danger btn-md" id="loadDelBtn" disabled>
                                     <span class="spinner-grow spinner-grow-sm"></span>
                                     Loading..
                                 </button>
@@ -274,7 +274,7 @@
 
         <!-- Table for a preview of selected dataset -->
         <div id="tableDt">
-            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 65%;">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 75%;">
                 <!-- Alert -->
                 <div class="container mt-1" id="alertPreview"></div>
                 <h1>Preview of selected dataset</h1>
@@ -299,7 +299,7 @@
 
         <!-- Inserting parameters -->
         <div id="parameters">
-            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 65%;">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 75%;">
                 <h1>Insert parameters</h1>
                 <div class="sub-box">
                     <h2>Features</h2>
@@ -393,7 +393,7 @@
 
         <!-- Dataset processing container -->
         <div id="dtProcessing">
-            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 65%;">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 75%;">
                 <h1>Dataset Processing</h1>
                 <!-- Info -->
                 <div class="margin-top">
@@ -428,7 +428,7 @@
 
         <!-- Model evaluation -->
         <div id="modelEvaluation" style="display: none;">
-            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 65%;">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 75%;">
                 <h1>Evaluation of the built model</h1>
                 <!-- Metrics per class table -->
                 <div id="firstTable" class="table-responsive">
@@ -483,9 +483,9 @@
                 <div class="d-grid d-flex">
                     <!-- Naming the model -->
                     <div class="form-floating inline-param">
-                        <input type="text" id="modelName" class="form-control" placeholder="Model's name" data-bs-toggle="tooltip" title="The name of the model must be followed by at least 1 letter and optionally a number." required>
+                        <input type="text" id="modelName" class="form-control" placeholder="Model" data-bs-toggle="tooltip" title="The name of the model must be followed by at least 1 letter and optionally a number." required>
                         <label for="modelName">
-                            <span class="field-text">Model's name</span>
+                            <span class="field-text">Model</span>
                         </label>
                     </div>
                 </div>

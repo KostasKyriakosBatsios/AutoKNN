@@ -131,9 +131,9 @@
             </div>
         </nav>
 
-        <!-- Inserted parameters -->
+        <!-- API Documents -->
         <div id="apiDocs">
-            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 50%;">
+            <div class="container-sm p-5 my-5 bg-dark text-white" style="width: 75%;">
                 <h1>API Documents of AutoKNN application</h1>
                 <!-- User's token -->
                 <div class="sub-box">
@@ -160,7 +160,7 @@
                             <div id="usersCollapse" class="accordion-collapse collapse" aria-labelledby="headingUsers" data-bs-parent="#apiAccordion">
                                 <div class="accordion-body">
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#regCollapse" aria-expanded="false" aria-controls="regCollapse">
-                                        POST: /server/php/api/register.php
+                                        <div class="api-path">POST: /server/php/api/register.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="regCollapse" class="accordion-collapse collapse" aria-labelledby="regCollapse" data-bs-parent="#usersCollapse">
@@ -182,7 +182,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loginCollapse" aria-expanded="false" aria-controls="loginCollapse">
-                                        POST: /server/php/api/login.php
+                                        <div class="api-path">POST: /server/php/api/login.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="loginCollapse" class="accordion-collapse collapse" aria-labelledby="loginCollapse" data-bs-parent="#usersCollapse">
@@ -207,7 +207,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#editNamePassCollapse" aria-expanded="false" aria-controls="editNamePassCollapse">
-                                        POST: /server/php/api/edit_name_password.php
+                                        <div class="api-path">POST: /server/php/api/edit_name_password.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="editNamePassCollapse" class="accordion-collapse collapse" aria-labelledby="editNamePassCollapse" data-bs-parent="#usersCollapse">
@@ -230,7 +230,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#editEmailCollapse" aria-expanded="false" aria-controls="editEmailCollapse">
-                                        POST: /server/php/api/edit_email.php
+                                        <div class="api-path">POST: /server/php/api/edit_email.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="editEmailCollapse" class="accordion-collapse collapse" aria-labelledby="editEmailCollapse" data-bs-parent="#usersCollapse">
@@ -249,7 +249,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delAccCollapse" aria-expanded="false" aria-controls="delAccCollapse">
-                                        DELETE: /server/php/api/delete_account.php
+                                        <div class="api-path">DELETE: /server/php/api/delete_account.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="delAccCollapse" class="accordion-collapse collapse" aria-labelledby="delAccCollapse" data-bs-parent="#usersCollapse">
@@ -282,7 +282,7 @@
                             <div id="datasetsCollapse" class="accordion-collapse collapse" aria-labelledby="headingDatasets" data-bs-parent="#apiAccordion">
                                 <div class="accordion-body">
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#listDtCollapse" aria-expanded="false" aria-controls="listDtCollapse">
-                                        GET: /server/php/api/list_datasets.php
+                                        <div class="api-path">GET: /server/php/api/list_datasets.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="listDtCollapse" class="accordion-collapse collapse" aria-labelledby="listDtCollapse" data-bs-parent="#usersCollapse">
@@ -303,7 +303,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#uploadDtCollapse" aria-expanded="false" aria-controls="uploadDtCollapse">
-                                        POST: /server/php/api/upload_dataset.php
+                                        <div class="api-path">POST: /server/php/api/upload_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="uploadDtCollapse" class="accordion-collapse collapse" aria-labelledby="uploadDtCollapse" data-bs-parent="#usersCollapse">
@@ -324,7 +324,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loadDtCollapse" aria-expanded="false" aria-controls="loadDtCollapse">
-                                        GET: /server/php/api/load_dataset.php
+                                        <div class="api-path">GET: /server/php/api/load_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="loadDtCollapse" class="accordion-collapse collapse" aria-labelledby="loadDtCollapse" data-bs-parent="#usersCollapse">
@@ -377,7 +377,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadDtCollapse" aria-expanded="false" aria-controls="dnloadDtCollapse">
-                                        GET: /server/php/api/download_dataset.php?token={token}&file={file}
+                                        <div class="api-path">GET: /server/php/api/download_dataset.php?token={token}&file={file}</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="dnloadDtCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadDtCollapse" data-bs-parent="#usersCollapse">
@@ -396,7 +396,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delDtCollapse" aria-expanded="false" aria-controls="delDtCollapse">
-                                        DELETE: /server/php/api/delete_dataset.php
+                                        <div class="api-path">DELETE: /server/php/api/delete_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="delDtCollapse" class="accordion-collapse collapse" aria-labelledby="delDtCollapse" data-bs-parent="#usersCollapse">
@@ -416,7 +416,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#listUnclDtCollapse" aria-expanded="false" aria-controls="listUnclDtCollapse">
-                                        GET: /server/php/api/list_unclassified_datasets.php
+                                        <div class="api-path">GET: /server/php/api/list_unclassified_datasets.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="listUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="listUnclDtCollapse" data-bs-parent="#usersCollapse">
@@ -437,7 +437,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#uploadUnclDtCollapse" aria-expanded="false" aria-controls="uploadUnclDtCollapse">
-                                        POST: /server/php/api/upload_unclassified_dataset.php
+                                        <div class="api-path">POST: /server/php/api/upload_unclassified_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="uploadUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="uploadUnclDtCollapse" data-bs-parent="#usersCollapse">
@@ -456,7 +456,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loadUnclDtCollapse" aria-expanded="false" aria-controls="loadUnclDtCollapse">
-                                        GET: /server/php/api/load_unclassified_dataset.php
+                                        <div class="api-path">GET: /server/php/api/load_unclassified_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="loadUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="loadUnclDtCollapse" data-bs-parent="#usersCollapse">
@@ -508,7 +508,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadUnclDtCollapse" aria-expanded="false" aria-controls="dnloadUnclDtCollapse">
-                                        GET: /server/php/api/download_unclassified_dataset.php?token={token}&file={file}
+                                        <div class="api-path">GET: /server/php/api/download_unclassified_dataset.php?token={token}&file={file}</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="dnloadUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadUnclDtCollapse" data-bs-parent="#usersCollapse">
@@ -527,7 +527,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delUnclDtCollapse" aria-expanded="false" aria-controls="delUnclDtCollapse">
-                                        DELETE: /server/php/api/delete_unclassified_dataset.php
+                                        <div class="api-path">DELETE: /server/php/api/delete_unclassified_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="delUnclDtCollapse" class="accordion-collapse collapse" aria-labelledby="delUnclDtCollapse" data-bs-parent="#usersCollapse">
@@ -546,7 +546,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#loadClDtCollapse" aria-expanded="false" aria-controls="loadClDtCollapse">
-                                        GET: /server/php/api/load_classified_dataset.php
+                                        <div class="api-path">GET: /server/php/api/load_classified_dataset.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="loadClDtCollapse" class="accordion-collapse collapse" aria-labelledby="loadClDtCollapse" data-bs-parent="#usersCollapse">
@@ -602,7 +602,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadClDtCollapse" aria-expanded="false" aria-controls="dnloadClDtCollapse">
-                                        GET: /server/php/api/download_classified_dataset.php?token={token}&file={file}
+                                        <div class="api-path">GET: /server/php/api/download_classified_dataset.php?token={token}&file={file}</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="dnloadClDtCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadClDtCollapse" data-bs-parent="#usersCollapse">
@@ -633,7 +633,7 @@
                             <div id="modelsCollapse" class="accordion-collapse collapse" aria-labelledby="headingModels" data-bs-parent="#apiAccordion">
                                 <div class="accordion-body">
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#listModCollapse" aria-expanded="false" aria-controls="listModCollapse">
-                                        GET: /server/php/api/list_models.php
+                                        <div class="api-path">GET: /server/php/api/list_models.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="listModCollapse" class="accordion-collapse collapse" aria-labelledby="listModCollapse" data-bs-parent="#usersCollapse">
@@ -667,7 +667,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#modContCollapse" aria-expanded="false" aria-controls="modContCollapse">
-                                        GET: /server/php/api/get_model_content.php
+                                        <div class="api-path">GET: /server/php/api/get_model_content.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="modContCollapse" class="accordion-collapse collapse" aria-labelledby="modContCollapse" data-bs-parent="#usersCollapse">
@@ -695,7 +695,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dnloadModCollapse" aria-expanded="false" aria-controls="dnloadModCollapse">
-                                        GET: /server/php/api/download_model.php?token={token}&file={file}
+                                        <div class="api-path">GET: /server/php/api/download_model.php?token={token}&file={file}</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="dnloadModCollapse" class="accordion-collapse collapse" aria-labelledby="dnloadModCollapse" data-bs-parent="#usersCollapse">
@@ -714,7 +714,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-danger w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#delModCollapse" aria-expanded="false" aria-controls="delModCollapse">
-                                        DELETE: /server/php/api/delete_model.php
+                                        <div class="api-path">DELETE: /server/php/api/delete_model.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="delModCollapse" class="accordion-collapse collapse" aria-labelledby="delModCollapse" data-bs-parent="#usersCollapse">
@@ -745,7 +745,7 @@
                             <div id="classificationCollapse" class="accordion-collapse collapse" aria-labelledby="headingClassification" data-bs-parent="#apiAccordion">
                                 <div class="accordion-body">
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#postKnnCollapse" aria-expanded="false" aria-controls="postKnnCollapse">
-                                        POST: /server/php/api/post_knn_train_test.php
+                                        <div class="api-path">POST: /server/php/api/post_knn_train_test.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="postKnnCollapse" class="accordion-collapse collapse" aria-labelledby="postKnnCollapse" data-bs-parent="#usersCollapse">
@@ -782,7 +782,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-success w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#getKnnCollapse" aria-expanded="false" aria-controls="getKnnCollapse">
-                                        GET: /server/php/api/get_knn_train_test.php
+                                        <div class="api-path">GET: /server/php/api/get_knn_train_test.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="getKnnCollapse" class="accordion-collapse collapse" aria-labelledby="getKnnCollapse" data-bs-parent="#usersCollapse">
@@ -857,7 +857,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#saveModCollapse" aria-expanded="false" aria-controls="saveModCollapse">
-                                        POST: /server/php/api/save_model.php
+                                        <div class="api-path">POST: /server/php/api/save_model.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="saveModCollapse" class="accordion-collapse collapse" aria-labelledby="saveModCollapse" data-bs-parent="#usersCollapse">
@@ -888,7 +888,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#classifyCollapse" aria-expanded="false" aria-controls="classifyCollapse">
-                                        POST: /server/php/api/classify_data.php
+                                        <div class="api-path">POST: /server/php/api/classify_data.php</div>
                                         <i><ion-icon name="caret-down-outline"></ion-icon></i>
                                     </button>
                                     <div id="classifyCollapse" class="accordion-collapse collapse" aria-labelledby="classifyCollapse" data-bs-parent="#usersCollapse">

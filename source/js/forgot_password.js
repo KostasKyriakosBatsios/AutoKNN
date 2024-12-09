@@ -31,10 +31,10 @@ $(document).ready(function() {
             data: JSON.stringify({
                 email: email
             }),
-            success: function(data) {
+            success: function(response) {
                 // Reset form
-                showAlert('success', data.message, '#alertReset');
-                showAlert('warning', 'If a verification email has not been sent to your email address, please click on the resend mail button', '#alertResend');
+                showAlert('success', response.message, '#alertReset');
+                showAlert('warning', 'If a reset password email has not been sent to your email address, please click on the resend mail button', '#alertResend');
                 $('#loadResetBtn').hide();
                 $('#resendBtn').show();
             },

@@ -102,7 +102,7 @@ $(document).ready(function() {
            success: function(response) {
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
-                showAlert(response.status, response.message, '#alertRegister');
+                showAlert('success', 'Verification email resent successfully', '#alertRegister');
                 showAlert('warning', 'If a verification email has not been sent to your email address, please click on the resend mail button', '#alertResend');
            },
            error: function(xhr, status, error) {

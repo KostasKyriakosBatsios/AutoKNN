@@ -95,6 +95,16 @@ thead tr th {
     filter: brightness(100%);
 }
 
+/* Style for the API path text */
+.api-path {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+}
+
 /* Responsive */
 @media only screen and (max-width: 768px) {
     .box-area {
@@ -106,5 +116,9 @@ thead tr th {
     }
     .right-box {
         padding: 20px;
+    }
+    .sub-box {
+        margin: 10px;
+        padding: 5px;
     }
 }
