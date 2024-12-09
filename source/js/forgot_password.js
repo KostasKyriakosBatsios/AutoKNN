@@ -38,7 +38,11 @@ $(document).ready(function() {
                 $('#loadResetBtn').hide();
                 $('#resendBtn').show();
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 showAlert('danger', 'An error occurred. Please try again.', '#alertReset');
                 $('#resetBtn').show();
                 $('#loadResetBtn').hide();
@@ -64,8 +68,11 @@ $(document).ready(function() {
                 $('#resendBtn').show();
                 showAlert(response.status, response.message, '#alertResend');
            },
-           error: function(error) {
-                console.log('AJAX Error:', error); // Debug: log AJAX error
+           error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
                 showAlert('danger', 'An error occurred. Please try again.', '#alertResend');

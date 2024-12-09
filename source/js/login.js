@@ -54,8 +54,17 @@ $(document).ready(function() {
                     $('#loadLoginBtn').hide();      
                 }
             },
-            error: function(xhr) {
-                showAlert('danger', JSON.parse(xhr.responseText).message, '#alertLogin');
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertLogin');
                 $('#loginBtn').show();
                 $('#loadLoginBtn').hide();
             }

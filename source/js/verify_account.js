@@ -28,15 +28,17 @@ $(document).ready(function() {
             showAlert('success', 'Account verified successfully.', '#alertVerify');
             $('#loginBtn').show();
         },
-        error: function(jqXHR) {
-            let response;
-            try {
-                response = JSON.parse(jqXHR.responseText);
-            } catch (e) {
-                response = { message: 'An unexpected error occurred.' };
-            }
+        error: function(xhr, status, error) {
+            // Handle error during the kNN execution
+            console.log('Error starting the algorithm:', error);
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
 
-            showAlert('danger', response.message || 'An error occurred while verifying the account. Press resend email button to send a new verification email.', '#alertVerify');
+            // Display specific error message from the server response
+            const response = xhr.responseJSON;
+            const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+            showAlert('danger', message || 'An error occurred while verifying the account. Press resend email button to send a new verification email.', '#alertVerify');
             $('#resendBtn').show();
 
             // Set email if provided in the error response
@@ -65,7 +67,11 @@ $(document).ready(function() {
                 showAlert(response.status, response.message, '#alertResend');
                 $('#resendBtn').show();
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
                 showAlert('danger', 'Failed to resend verification email. Please try again later.', '#alertVerify');

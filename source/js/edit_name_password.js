@@ -130,7 +130,10 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                console.error("AJAX error: ", xhr, status, error); // Log detailed error
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#confirmBtn').show();
                 $('#loadEditNamePassBtn').hide();
                 showAlert('An error occurred while processing your request.', 'danger');

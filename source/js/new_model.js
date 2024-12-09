@@ -733,9 +733,15 @@ $(document).ready(function() {
                 console.log('Error starting the algorithm:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                 $('#buildModelBtn').prop('disabled', false);
                 $('#loadBuildModelBtn').hide();
-                showAlert('danger', 'Failed to start the algorithm.', '#alertBuildModel');
+                showAlert('danger', message, '#alertBuildModel');
+                $('#processStatus').text(response.status);
             }
         });
     }

@@ -75,7 +75,11 @@ $(document).ready(function() {
                     $selectModel.append(`<option value="${model.path}">[Model] ${model.name}</option>`);
                 });
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 showAlert('danger', 'Failed to load models.', '#alertModels');
             }
         });
@@ -141,8 +145,11 @@ $(document).ready(function() {
                         $('#selectClass').html('<option value="default" selected>Failed to retrieve a class</option>');
                     }
                 },                
-                error: function(textStatus, errorThrown) {
-                    console.error("AJAX Error:", textStatus, errorThrown); // Debugging line for error
+                error: function(xhr, status, error) {
+                    // Handle error during the kNN execution
+                    console.log('Error starting the algorithm:', error);
+                    console.log('XHR object:', xhr);
+                    console.log('Status:', status);
                     showAlert('danger', 'Failed to load model content.', '#alertPreviewParams');
                 },
                 complete: function() {
@@ -239,14 +246,22 @@ $(document).ready(function() {
                 showAlert('success', response.message, '#alertDelModal');
                 loadModels();
             },
-            error: function(jqXHR) {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#delModelBtn').show();
                 $('#loadDelModelBtn').hide();
                 $('#delBtn').show();
                 $('#loadDelBtn').hide();
 
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                 // Show error alert
-                showAlert('danger', jqXHR.responseJSON.message, '#alertDelModal');
+                showAlert('danger', message, '#alertDelModal');
             }
         });
     });
@@ -283,7 +298,11 @@ $(document).ready(function() {
                     $selectUnclassifiedDataset.append(`<option value="${UnclassifiedDataset.path}">[Unclassified dataset] ${UnclassifiedDataset.name}</option>`);
                 });
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 showAlert('danger', 'Failed to load models.', '#alertUnclassifiedDatasets');
             }
         });
@@ -382,11 +401,20 @@ $(document).ready(function() {
                 // Making sure when the upload was successful, to not show any other windows
                 $('#alertPreview').html('');
             },
-            error: function(jqXHR) {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 // Show the upload button and hide the loading button
                 $('#uploadUnclassifiedBtn').show();
                 $('#loadUploadingUnclassifiedDatasetBtn').hide();
-                showAlert('danger', jqXHR.responseJSON.message, '#alertUploadUnclassifiedModal');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+                
+                showAlert('danger', message, '#alertUploadUnclassifiedModal');
             }
         });
     });
@@ -452,7 +480,11 @@ $(document).ready(function() {
                     // Populate table with dataset contents
                     populateTable(dt.header, dt.data);
                 },
-                error: function() {
+                error: function(xhr, status, error) {
+                    // Handle error during the kNN execution
+                    console.log('Error starting the algorithm:', error);
+                    console.log('XHR object:', xhr);
+                    console.log('Status:', status);
                     // Hide loading button
                     $('#loadUnclassifiedDatasetBtn').hide();
                     
@@ -569,14 +601,22 @@ $(document).ready(function() {
                 showAlert('success', response.message, '#alertDelUnclassifiedModal');
                 loadUnclassifiedDatasets();
             },
-            error: function(jqXHR) {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#delUnclassifiedDtBtn').show();
                 $('#loadDelUnclassifiedDtBtn').hide();
                 $('#delUnclassifiedBtn').show();
                 $('#loadDelUnclassifiedBtn').hide();
 
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                 // Show error alert
-                showAlert('danger', jqXHR.responseJSON.message, '#alertDelUnclassifiedModal');
+                showAlert('danger', message, '#alertDelUnclassifiedModal');
             }
         });
     });
@@ -637,10 +677,19 @@ $(document).ready(function() {
                             // Call the function to populate the table
                             populateClassifiedDataset(header, data);
                         },
-                        error: function(error) {
+                        error: function(xhr, status, error) {
+                            // Handle error during the kNN execution
+                            console.log('Error starting the algorithm:', error);
+                            console.log('XHR object:', xhr);
+                            console.log('Status:', status);
                             $('#classifyDataBtn').show();
                             $('#loadClassifyDtBtn').hide();
-                            $('#alertClassifyDtModal').html(error.responseJSON.message);
+
+                            // Display specific error message from the server response
+                            const response = xhr.responseJSON;
+                            const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                            $('#alertClassifyDtModal').html(message);
                         }
                     });
 
@@ -670,10 +719,19 @@ $(document).ready(function() {
                         }
                 }
             },
-            error: function(error) {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#classifyDataBtn').show();
                 $('#loadClassifyDtBtn').hide();
-                showAlert('danger', error.responseJSON.message, '#alertPreview');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertPreview');
             }
         });
     });

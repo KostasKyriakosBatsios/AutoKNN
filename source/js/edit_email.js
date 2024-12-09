@@ -87,7 +87,11 @@ $(document).ready(function() {
                     $('#confirmBtn').show();
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 // Show error alert
                 showAlert('danger', 'An error occurred. Please try again.', '#alertEditEmail');
                 $('#loadEditConfirmBtn').hide();
@@ -114,8 +118,11 @@ $(document).ready(function() {
                 $('#resendBtn').show();
                 showAlert(response.status, response.message, '#alertResend');
            },
-           error: function(error) {
-                console.log('AJAX Error:', error); // Debug: log AJAX error
+           error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
                 showAlert('danger', 'An error occurred. Please try again.', '#alertResend');

@@ -159,5 +159,4 @@
         "command" => $pythonCmd,
         "return_code" => $return
     ]);
-
 ?>

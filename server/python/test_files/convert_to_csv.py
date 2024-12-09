@@ -1,5 +1,5 @@
 # Read the magic.dat file
-with open("datasets/iris0.dat", "r") as file:
+with open("datasets/penbased.dat", "r") as file:
     lines = file.readlines()
 
 # Extract attribute names
@@ -10,7 +10,7 @@ data_start = lines.index('@data\n') + 1
 data_rows = [line.strip() for line in lines[data_start:]]
 
 # Write the data to magic.csv
-with open("datasets/iris0.csv", "w") as file:
+with open("datasets/penbased.csv", "w") as file:
     # Write attribute names as header
     file.write(",".join(attributes) + "\n")
     # Write data rows

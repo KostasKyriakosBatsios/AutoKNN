@@ -74,8 +74,11 @@ $(document).ready(function() {
                     showAlert('warning', 'If a verification email has not been sent to your email address, please click on the resend mail button.', '#alertResend');
                 }
             },
-            error: function(error) {
-                console.error('AJAX Error:', error);
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#loadRegisterBtn').hide();
                 $('#registerBtn').show();
                 showAlert('danger', 'An error occurred. Please try again.', '#alertRegister');
@@ -102,12 +105,20 @@ $(document).ready(function() {
                 showAlert(response.status, response.message, '#alertRegister');
                 showAlert('warning', 'If a verification email has not been sent to your email address, please click on the resend mail button', '#alertResend');
            },
-           error: function(error) {
-                console.log('AJAX Error:', error);
+           error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
-                showAlert('danger', error.message, '#alertRegister');
-                showAlert('danger', error.message, '#alertResend');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertRegister');
+                showAlert('danger', message, '#alertResend');
            }
         });
     });

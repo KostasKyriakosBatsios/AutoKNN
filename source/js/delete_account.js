@@ -107,7 +107,11 @@ $(document).ready(function() {
                     $('#deleteModal').modal('hide');
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // Handle error during the kNN execution
+                console.log('Error starting the algorithm:', error);
+                console.log('XHR object:', xhr);
+                console.log('Status:', status);
                 showAlert('An error occurred while deleting the account.', 'danger');
                 $('#loadDeleteBtn').hide();
                 $('#confirmBtn').show();
