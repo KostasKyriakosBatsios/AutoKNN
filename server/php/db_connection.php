@@ -8,15 +8,12 @@
     $user = $DB_USER;
     $pass = $DB_PASS;
 
-    // Check the name of the host
-    if (gethostname() === "kclusterhub") {
-        $mysqli = new mysqli($host, $user, $pass, $db);
-    } else {
-        $host = "localhost";
-        $pass = "";
-        $db = "autoknn_db";
-        $mysqli = new mysqli($host, $userlocal, $pass, $db);
-    }
+    $mysqli = new mysqli($host, $user, $pass, $db);
+
+/*  $host = "localhost";
+    $pass = "";
+    $db = "autoknn_db";
+    $mysqli = new mysqli($host, $userlocal, $pass, $db); */
 
     // Checking if the connection to MySQL has failed.
     if ($mysqli->connect_errno) {

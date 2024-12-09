@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS `dataset_execution` (
   PRIMARY KEY (`id`),
   KEY `models` (`id_of_user`),
   CONSTRAINT `FK_dataset_execution_users` FOREIGN KEY (`id_of_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Data exporting was unselected.
+-- Dumping data for table autoknn_db.dataset_execution: ~0 rows (approximately)
 
 -- Dumping structure for πίνακας autoknn_db.models
 DROP TABLE IF EXISTS `models`;
@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS `models` (
   PRIMARY KEY (`id`),
   KEY `classes` (`id_of_executed_dataset`) USING BTREE,
   CONSTRAINT `FK_models_dataset_execution` FOREIGN KEY (`id_of_executed_dataset`) REFERENCES `dataset_execution` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Data exporting was unselected.
+-- Dumping data for table autoknn_db.models: ~0 rows (approximately)
 
 -- Dumping structure for πίνακας autoknn_db.users
 DROP TABLE IF EXISTS `users`;
@@ -68,9 +68,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email_verification` tinyint(1) NOT NULL DEFAULT 0,
   `allowPublic` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Data exporting was unselected.
+-- Dumping data for table autoknn_db.users: ~0 rows (approximately)
+INSERT INTO `users` (`id`, `fname`, `lname`, `email`, `pass`, `token`, `email_verification`, `allowPublic`) VALUES
+	(47, 'John', 'Doe', 'konstantinos.mpatsios@gmail.com', '$2y$10$we5Gm9LRwo20K4UHcGkVeu8nXra60XbiXKoL.V85OEwvTdXS5S4E6', 'ca0a2c907c46cb55caeb91fe42fccccb73c434ba65270a0a70e5b7010fad4eb31c0f3b816ea0aafcfc406610fce48d2a38db', 1, 0);
 
 -- Dumping structure for πίνακας autoknn_db.verify_account
 DROP TABLE IF EXISTS `verify_account`;
@@ -82,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `verify_account` (
   CONSTRAINT `FK_verify_account_users` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Data exporting was unselected.
+-- Dumping data for table autoknn_db.verify_account: ~0 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
