@@ -46,7 +46,7 @@
         if (password_verify($password, $user['pass'])) {
             // Check if the token isn't null
             if (!is_null($user['token']) && !empty($user['token'])) {
-                /* Check if the user is verified
+                //Check if the user is verified
                 $sql = "SELECT * FROM users WHERE email = ? AND email_verification = 1";
                 $stmt2 = $mysqli->prepare($sql);
                 $stmt2->bind_param("s", $email);
@@ -56,7 +56,7 @@
                     echo json_encode(["status" => "danger", "message" => "Email is not verified."]);
                     exit;
                 }
-                $stmt2->close(); */
+                $stmt2->close();
 
                 echo json_encode([
                     "status" => "success",
