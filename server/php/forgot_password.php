@@ -26,7 +26,7 @@
 
     // Validate email
     if (empty($email)) {
-        echo json_encode(["status" => "danger", "message" => "Email and Password are required."]);
+        echo json_encode(["status" => "danger", "message" => "Email is required."]);
         exit();
     }
 
