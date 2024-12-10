@@ -53,6 +53,13 @@
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        echo json_encode(["status" => "warning", "message" => "Email already exists."]);
+        exit;
+    }
+    
     $stmt->close();
 
     // Hash the password and generate a random token
