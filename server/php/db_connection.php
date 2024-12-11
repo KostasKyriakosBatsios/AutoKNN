@@ -6,7 +6,20 @@
     $user = $DB_USER;
     $pass = $DB_PASS;
 
-    $mysqli = new mysqli($host, $user, $pass, $db);
+    // $mysqli = new mysqli($host, $user, $pass, $db);
+
+    // Report any connection errors
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+    if (gethostname() == 'nireas') {
+        $mysqli = new mysqli($host, $user, $pass, $db);
+    } else {
+        $host = "localhost";
+        $userlocal = $DB_USER_LOCAL;
+        $pass = "";
+        $db = "autoknn_db";
+        $mysqli = new mysqli($host, $userlocal, $pass, $db);
+    }
 
 /*  $host = "localhost";
     $userlocal = $DB_USER_LOCAL;

@@ -8,7 +8,7 @@
 
     // Ensure the request method is POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        http_response_code(405); // Method Not Allowed
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(["message" => "Only POST requests are allowed"]);
         exit;
     }
@@ -18,7 +18,7 @@
 
     // Validate required parameters
     if (!isset($data["fname"]) || !isset($data["lname"]) || !isset($data["email"]) || !isset($data["password"]) || !isset($data["confirmPassword"])) {
-       http_response_code(400);
+        header("HTTP/1.1 400 Bad Request");
        echo json_encode(["status" => "danger", "message" => "Missing required parameters"]);
        exit;
     }

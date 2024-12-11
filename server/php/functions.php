@@ -2,7 +2,7 @@
     // Return the domain
     function getDomain() {
         $domain = '';
-        if (gethostname() == 'kclusterhub') {
+        if (gethostname() == 'nireas') {
             $domain = 'https://kclusterhub.iee.ihu.gr/autoknn';
         } else {
             $domain = 'http://localhost/autoknn';
