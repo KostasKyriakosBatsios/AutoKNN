@@ -2,7 +2,7 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
-    require "/autoknn/vendor/autoload.php";
+    require __DIR__.'/../../vendor/autoload.php';
     require "credentials_config.php";
     
     function send_email($recipient_email, $recipient_name, $subject, $body, $alt_body) {
