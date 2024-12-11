@@ -75,13 +75,24 @@
 
     // Create user directories
     $hash_user = md5($email);
-    $directories = ["datasets", "models_json", "models_saved", "unclassified_datasets", "classified_datasets"];
-    foreach ($directories as $dir) {
-        $path = "../../python/private/$hash_user/$dir";
-        if (!mkdir($path, 0777, true) && !is_dir($path)) {
-            echo json_encode(["status" => "danger", "message" => "Failed to create directory: $path"]);
-            exit;
-        }
+    try{
+        $dir1 = mkdir("../../python/private/$hash_user", 0775, true);
+        $dir2 = mkdir("../../python/private/$hash_user/datasets", 0775, true);
+        $dir3 = mkdir("../../python/private/$hash_user/models_json", 0775, true);
+        $dir4 = mkdir("../../python/private/$hash_user/models_saved", 0775, true);
+        $dir5 = mkdir("../../python/private/$hash_user/unclassified_datasets", 0775, true);
+        $dir6 = mkdir("../../python/private/$hash_user/classified_datasets", 0775, true);
+    }catch(Exception $e){
+        http_response_code(400);
+        echo json_encode(["status" => "danger", "message"=>"An error has occured while trying to create user's directory."]);
+        exit;
+    }
+
+    // Check if the directories were created
+    if(!$dir1 || !$dir2 || !$dir3 || !$dir4 || !$dir5 || !$dir6){
+        http_response_code(400);
+        echo json_encode(["status" => "danger", "message"=>"An error has occured while trying to create user's directory."]);
+        exit;
     }
 
     // Retrieve the user ID
