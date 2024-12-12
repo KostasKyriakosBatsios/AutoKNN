@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '/var/www/html/webkmeans/kclusterhub/autoknn/.venv/lib/python3.11/site-packages')
-import joblib
 import json
+import joblib
 
 if len(sys.argv) != 2:
     print(json.dumps({"error": "Invalid usage: Correct format is python get_model_content.py <model_path>"}))

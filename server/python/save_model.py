@@ -1,8 +1,8 @@
 import sys
 sys.path.insert(0, '/var/www/html/webkmeans/kclusterhub/autoknn/.venv/lib/python3.11/site-packages')
-import joblib
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
+import joblib
 
 def save_knn_model(file_path, features, target_class, k_value, distance_value, p_value, saved_model_file):
     # Load the dataset

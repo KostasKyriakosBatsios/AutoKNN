@@ -101,6 +101,7 @@
     // Return both features and class to the frontend
     echo json_encode([
         "status" => "success",
+        "OutputJSON" => $outputJson,
         "features" => $response['features'] ?? [],  // Ensure features are present
         "class" => $class ?? '' // Use the class retrieved from the database
     ]);
