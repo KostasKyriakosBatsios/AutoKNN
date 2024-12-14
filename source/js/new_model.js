@@ -207,11 +207,13 @@ $(document).ready(function() {
                 $('#uploadDtBtn').show();
                 $('#loadUploadingDatasetBtn').hide();
                 $('#loadUploadDatasetBtn').hide();
+                $('#selectDataset').val('default');
                 showAlert('success', response.message, '#alertUploadModal');
                 loadDatasets();
 
                 // Making sure when the upload was successful and the select folder is default, to not show any other windows
                 $('#alertPreview').html('');
+                $('#tableDt').hide();
                 $('#parameters').hide();
                 $('#individualFeatures').empty();
             },
@@ -489,13 +491,15 @@ $(document).ready(function() {
                 $('#selectDataset').val('default');
                 $('#delDtBtn').prop('disabled', true);
                 $('#delBtn').prop('disabled', true);
-                $('#dnloadBtn').prop('disabled', true)
-                $('#alertPreview').html('');
-                $('#tableDt').hide();
-                $('#normal').hide();                
-                
+                $('#dnloadBtn').prop('disabled', true);
+
                 showAlert('success', response.message, '#alertDelModal');
                 loadDatasets();
+
+                $('#alertPreview').html('');
+                $('#tableDt').hide();
+                $('#parameters').hide();
+                $('#individualFeatures').empty();                
             },
             error: function(error, xhr, status) {
                 console.log('Error starting the algorithm:', error);

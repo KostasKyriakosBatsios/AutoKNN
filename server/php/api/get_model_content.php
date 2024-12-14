@@ -47,46 +47,13 @@
         exit;
     }
 
-    // Execute the Python script to get the features
-    $escapedModelFilePath = escapeshellarg($modelFilePath);
-    $pythonCmd = "python3 ../../python/get_model_content.py $escapedModelFilePath 2>&1";
-
-    // Execute the Python command and capture the output
-    $output = [];
-    $return = 0;
-    exec($pythonCmd, $output, $return);
-
-    // Combine the output into a single JSON response
-    $outputJson = implode("\n", $output); // Combine output lines into a single string
-
-    // Decode JSON output
-    $response = json_decode($outputJson, true); // Convert JSON to associative array
-
     // Extract the base name of the model file without the extension
     $baseFileName = pathinfo($model, PATHINFO_FILENAME);
 
-    // Extract the class from the database based on id of the executed dataset and the base model file name
-    $sql = "SELECT id FROM dataset_execution WHERE id_of_user = (
-        SELECT id FROM users WHERE token = ?
-    )";
+    // Extract the class of the chosen model
+    $sql = "SELECT name_of_class, features FROM models WHERE name_of_model = ?";
     $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param('s', $token);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 0) {
-        http_response_code(500);
-        echo json_encode(["status" => "danger", "message" => "Failed to retrieve dataset execution ID"]);    
-        exit;    
-    }
-
-    $datasetExecution = $result->fetch_assoc();
-    $datasetId = $datasetExecution['id'];
-    $stmt->close();
-
-    $sql = "SELECT name_of_class FROM models WHERE name_of_model = ? AND id_of_executed_dataset = ?";
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param('si', $baseFileName, $datasetId);  // Use base file name
+    $stmt->bind_param('s', $baseFileName);  // Use base file name
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -95,14 +62,18 @@
         exit;
     }
 
-    $modelClass = $result->fetch_assoc();
-    $class = $modelClass['name_of_class'];
+    $results = $result->fetch_assoc();
+    $class = $results['name_of_class'];
+
+    // Use features from the databasev and convert features to an array
+    $features = $results['features']; 
+    $featuresArray = explode(",", $features);
+    $stmt->close();
 
     // Return both features and class to the frontend
     echo json_encode([
         "status" => "success",
-        "OutputJSON" => $outputJson,
-        "features" => $response['features'] ?? [],  // Ensure features are present
+        "features" => $featuresArray ?? [],  // Ensure features are present
         "class" => $class ?? '' // Use the class retrieved from the database
     ]);
 ?>

@@ -87,10 +87,13 @@
 
     $stmt->close();
 
-    // Check if the name already exists
-    $sql = "SELECT * FROM models WHERE name_of_model = ?";
+    // Check if the name already exists based on the existence in models table and of the id of the user
+    $sql = "SELECT *
+            FROM models m
+            INNER JOIN dataset_execution de ON m.id_of_executed_dataset = de.id
+            WHERE name_of_model = ? AND id_of_user = ?";
     $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("s", $model_name);
+    $stmt->bind_param("si", $model_name, $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();

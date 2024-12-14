@@ -397,9 +397,6 @@ $(document).ready(function() {
                 $('#loadUploadUnclassifiedDatasetBtn').hide();
                 showAlert('success', response.message, '#alertUploadUnclassifiedModal');
                 loadUnclassifiedDatasets();
-
-                // Making sure when the upload was successful, to not show any other windows
-                $('#alertPreview').html('');
             },
             error: function(xhr, status, error) {
                 // Handle error during the kNN execution
