@@ -25,8 +25,8 @@
     }
 
     // Change value of verified user from 0 to 1
-    $updateUserVerifiedQuery = "UPDATE users u JOIN verify_account va ON u.id = va.id SET u.email_verification = 1 WHERE va.verification_key = ?";
-    $stmt = $mysqli->prepare($updateUserVerifiedQuery);
+    $sql = "UPDATE users u JOIN verify_account va ON u.id = va.id_of_user SET u.email_verification = 1 WHERE va.verification_key = ?";
+    $stmt = $mysqli->prepare($sql);
     $stmt->bind_param('s', $verification_key);
     $stmt->execute();
 

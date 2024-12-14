@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `dataset_execution` (
   PRIMARY KEY (`id`),
   KEY `models` (`id_of_user`),
   CONSTRAINT `FK_dataset_execution_users` FOREIGN KEY (`id_of_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- Data exporting was unselected.
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `models` (
   PRIMARY KEY (`id`),
   KEY `classes` (`id_of_executed_dataset`) USING BTREE,
   CONSTRAINT `FK_models_dataset_execution` FOREIGN KEY (`id_of_executed_dataset`) REFERENCES `dataset_execution` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- Data exporting was unselected.
 
@@ -68,18 +68,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email_verification` tinyint(1) NOT NULL DEFAULT 0,
   `allowPublic` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for πίνακας autoknn_db.verify_account
 DROP TABLE IF EXISTS `verify_account`;
 CREATE TABLE IF NOT EXISTS `verify_account` (
-  `id` int(11) NOT NULL,
+  `id_of_user` int(11) NOT NULL,
   `verification_key` varchar(100) NOT NULL,
   `creation_time` timestamp NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `FK_verify_account_users` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  PRIMARY KEY (`id_of_user`) USING BTREE,
+  CONSTRAINT `FK_verify_account_users` FOREIGN KEY (`id_of_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- Data exporting was unselected.

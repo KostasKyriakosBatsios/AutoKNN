@@ -30,13 +30,15 @@ $(document).ready(function() {
         },
         error: function(xhr, status, error) {
             // Handle error during the kNN execution
-            console.log('Error starting the algorithm:', error);
+            console.log('Error:', error);
             console.log('XHR object:', xhr);
             console.log('Status:', status);
 
             // Display specific error message from the server response
-            const response = xhr.responseJSON;
+            const response = JSON.parse(xhr.responseText);
             const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+            console.log('Response:', response);
 
             showAlert('danger', message || 'An error occurred while verifying the account. Press resend email button to send a new verification email.', '#alertVerify');
             $('#resendBtn').show();
@@ -54,6 +56,7 @@ $(document).ready(function() {
     $('#resendBtn').on('click', function() {
         $('#resendBtn').hide();
         $('#loadResendBtn').show();
+        console.log('email:', email);
 
         // AJAX call to resend the verification email
         $.ajax({
@@ -69,7 +72,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 // Handle error during the kNN execution
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
                 $('#loadResendBtn').hide();

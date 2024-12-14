@@ -54,7 +54,7 @@
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Update the user's password in the database
-    $sql = "UPDATE users u JOIN verify_account va ON u.id = va.id SET u.pass = ? WHERE va.verification_key = ?";
+    $sql = "UPDATE users u JOIN verify_account va ON u.id = va.id_of_user SET u.pass = ? WHERE va.verification_key = ?";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("ss", $hashedPassword, $verification_key);
     $stmt->execute();

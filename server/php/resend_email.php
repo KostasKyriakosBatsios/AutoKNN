@@ -60,7 +60,7 @@
     $stmt->close();
 
     // Delete from verify account table the user
-    $sql = "DELETE FROM verify_account WHERE id = ?";
+    $sql = "DELETE FROM verify_account WHERE id_of_user = ?";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -68,7 +68,7 @@
 
     // Create new verification key
     $verification_key = md5(random_bytes(16));
-    $sql = "INSERT INTO verify_account(id, verification_key) VALUES (?, ?)";
+    $sql = "INSERT INTO verify_account(id_of_user, verification_key) VALUES (?, ?)";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("is", $userId, $verification_key);
     $stmt->execute();

@@ -63,7 +63,7 @@
 
     // Generate verification key
     $verification_key = md5(random_bytes(16));
-    $verifQuery = "INSERT INTO verify_account (id, verification_key) VALUES (?, ?)";
+    $verifQuery = "INSERT INTO verify_account (id_of_user, verification_key) VALUES (?, ?)";
     $stmt = $mysqli->prepare($verifQuery);
     $stmt->bind_param("is", $id, $verification_key);
     $stmt->execute();

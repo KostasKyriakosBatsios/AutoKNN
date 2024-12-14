@@ -72,18 +72,6 @@
     $stmt->execute();
     $stmt->close();
 
-    // Create user directories
-    $hash_user = md5($email);
-    $directories = ["datasets", "models_json", "models_saved", "unclassified_datasets", "classified_datasets"];
-    $hash_directory = mkdir("../../python/private/$hash_user");
-    foreach ($directories as $dir) {
-        $path = "../../python/private/$hash_user/$dir";
-        if (!mkdir($path) && !is_dir($path)) {
-            echo json_encode(["status" => "danger", "message" => "Failed to create directory: $path"]);
-            exit;
-        }
-    }
-
     // Retrieve the user ID
     $sql = "SELECT id FROM users WHERE email = ?";
     $stmt = $mysqli->prepare($sql);
@@ -95,11 +83,23 @@
 
     // Create verification key
     $verification_key = md5(random_bytes(16));
-    $sql = "INSERT INTO verify_account(id, verification_key) VALUES (?, ?)";
+    $sql = "INSERT INTO verify_account(id_of_user, verification_key) VALUES (?, ?)";
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("is", $userId, $verification_key);
     $stmt->execute();
     $stmt->close();
+
+    // Create user directories
+    $hash_user = md5($email);
+    $directories = ["datasets", "models_json", "models_saved", "unclassified_datasets", "classified_datasets"];
+    $hash_directory = mkdir("../../python/private/$hash_user");
+    foreach ($directories as $dir) {
+        $path = "../../python/private/$hash_user/$dir";
+        if (!mkdir($path) && !is_dir($path)) {
+            echo json_encode(["status" => "danger", "message" => "Failed to create directory: $path"]);
+            exit;
+        }
+    }
 
     // Prepare email for verification
     $subject = "Email verification - AutoKNN Application";

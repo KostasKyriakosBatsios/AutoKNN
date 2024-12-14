@@ -44,10 +44,9 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 // Handle error during the kNN execution
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
-                
                 
                 // Display specific error message from the server response
                 const response = xhr.responseJSON;

@@ -88,7 +88,7 @@ $(document).ready(function() {
                 });
             },
             error: function(error, xhr, status) {
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
 
@@ -218,7 +218,7 @@ $(document).ready(function() {
                 $('#individualFeatures').empty();
             },
             error: function(error, xhr, status) {
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
                 // Show the upload button and hide the loading button
@@ -335,7 +335,7 @@ $(document).ready(function() {
                     handleParameterSettings();
                 },
                 error: function(error, xhr, status) {
-                    console.log('Error starting the algorithm:', error);
+                    console.log('Error:', error);
                     console.log('XHR object:', xhr);
                     console.log('Status:', status);
                     // Hide loading button
@@ -502,7 +502,7 @@ $(document).ready(function() {
                 $('#individualFeatures').empty();                
             },
             error: function(error, xhr, status) {
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
                 $('#delDtBtn').show();
@@ -734,7 +734,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 // Handle error during the kNN execution
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
 
@@ -774,7 +774,7 @@ $(document).ready(function() {
                 }
             },
             error: function(error, xhr, status) {
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
 
@@ -898,7 +898,7 @@ $(document).ready(function() {
                 showAlert('success', 'Model saved successfully.', '#alertEvaluation');
             },
             error: function(error, xhr, status) {
-                console.log('Error starting the algorithm:', error);
+                console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
                 $('#saveModelBtn').show();
