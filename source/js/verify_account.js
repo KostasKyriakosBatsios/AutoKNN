@@ -37,9 +37,7 @@ $(document).ready(function() {
             // Display specific error message from the server response
             const response = JSON.parse(xhr.responseText);
             const message = response && response.message ? response.message : 'An unexpected error occurred.';
-
-            console.log('Response:', response);
-
+    
             showAlert('danger', message || 'An error occurred while verifying the account. Press resend email button to send a new verification email.', '#alertVerify');
             $('#resendBtn').show();
 
@@ -47,8 +45,6 @@ $(document).ready(function() {
             if (response.email) {
                 email = response.email;
             }
-
-            console.log('email from response:', email);
         }
     });
 
@@ -56,7 +52,6 @@ $(document).ready(function() {
     $('#resendBtn').on('click', function() {
         $('#resendBtn').hide();
         $('#loadResendBtn').show();
-        console.log('email:', email);
 
         // AJAX call to resend the verification email
         $.ajax({
@@ -77,7 +72,12 @@ $(document).ready(function() {
                 console.log('Status:', status);
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
-                showAlert('danger', 'Failed to resend verification email. Please try again later.', '#alertVerify');
+
+                // Display specific error message from the server response
+                const response = JSON.parse(xhr.responseText);
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertVerify');
             }
         });
     });

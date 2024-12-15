@@ -31,6 +31,17 @@ $(document).ready(function() {
         window.location.href = '../index.html'; // Redirect to home page
     });
 
+    // Function to display the alert message
+    function showAlert(type, message, id) {
+        var alertMessage = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        $(id).html(alertMessage); // Display alert in the datasets section
+    }
+
     // Event listeners to check fields
     $('#email, #password, #confirmPassword').on('input', function() {
         var email = $('#email').val().trim();
@@ -51,7 +62,7 @@ $(document).ready(function() {
         var confirmPassword = $('#confirmPassword').val().trim();
 
         if (password !== confirmPassword) {
-            showAlert('Passwords do not match. Please try again.', 'danger');
+            showAlert('danger', 'Passwords do not match. Please try again.', '#alertDelete');
             $('#loadDeleteBtn').hide();
             $('#confirmBtn').show();
             $('#deleteModal').modal('hide'); // Hide the modal if passwords do not match
@@ -59,7 +70,7 @@ $(document).ready(function() {
         }
 
         if (email !== loggedInEmail) {
-            showAlert('The email address does not match the logged-in account.', 'danger');
+            showAlert('danger', 'The email address does not match the logged-in account.', '#alertDelete');
             $('#loadDeleteBtn').hide();
             $('#confirmBtn').show();
             $('#deleteModal').modal('hide'); // Hide the modal if the email does not match
@@ -90,7 +101,7 @@ $(document).ready(function() {
             }),
             success: function(response) {
                 if (response.status === 'success') {
-                    showAlert('Account deleted successfully. You will be redirected shortly.', 'success');
+                    showAlert('success', 'Account deleted successfully. You will be redirected shortly.', '#alertDelete');
                     setTimeout(function() {
                         $('#loadDeleteBtn').hide();
                         $('#confirmBtn').show();
@@ -101,7 +112,7 @@ $(document).ready(function() {
                         window.location.href = '../index.html'; // Redirect to home page
                     }, 2000); // Delay for user to see the alert
                 } else {
-                    showAlert(response.message, 'danger');
+                    showAlert('danger', response.message, '#alertDelete');
                     $('#loadDeleteBtn').hide();
                     $('#confirmBtn').show();
                     $('#deleteModal').modal('hide');
@@ -112,22 +123,16 @@ $(document).ready(function() {
                 console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
-                showAlert('An error occurred while deleting the account.', 'danger');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertDelete');
                 $('#loadDeleteBtn').hide();
                 $('#confirmBtn').show();
                 $('#deleteModal').modal('hide');
             }
         });
     });
-
-    // Function to display alert message
-    function showAlert(message, type) {
-        var alertMessage = `
-            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        `;
-        $('#alertDelete').html(alertMessage); // Make sure this container exists in your HTML
-    }
 });

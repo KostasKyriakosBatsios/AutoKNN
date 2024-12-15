@@ -43,7 +43,12 @@ $(document).ready(function() {
                 console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
-                showAlert('danger', 'An error occurred. Please try again.', '#alertReset');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertReset');
                 $('#resetBtn').show();
                 $('#loadResetBtn').hide();
             }
@@ -75,7 +80,12 @@ $(document).ready(function() {
                 console.log('Status:', status);
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
-                showAlert('danger', 'An error occurred. Please try again.', '#alertResend');
+
+                // Display specific error message from the server response
+                const response = JSON.parse(xhr.responseText);
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertResend');
            }
         });
     });

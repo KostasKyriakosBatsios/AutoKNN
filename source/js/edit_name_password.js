@@ -28,15 +28,15 @@ $(document).ready(function() {
         window.location.href = '../index.html'; // Redirect to home page
     });
 
-    // Function to display alert message
-    function showAlert(message, type) {
+    // Function to display the alert Datasets' message
+    function showAlert(type, message, id) {
         var alertMessage = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
                 ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
-        $('#alertEditNamePass').html(alertMessage); // Make sure this container exists in your HTML
+        $(id).html(alertMessage); // Display alert in the datasets section
     }
 
     // Hanlde the radio buttons
@@ -115,7 +115,7 @@ $(document).ready(function() {
                 $('#loadEditNamePassBtn').hide();
 
                 if (response.status === 'success') {
-                    showAlert(response.message, 'success');
+                    showAlert('success', response.message, '#alertEditNamePass');
                     
                     if (selectedOption === 'username' || selectedOption === 'both') {
                         // Update session storage and displayed username
@@ -126,7 +126,7 @@ $(document).ready(function() {
 
                     $('#fname, #lname, #currentPassword, #newPassword, #confirmPassword').val('');
                 } else {
-                    showAlert(response.message, 'danger');
+                    showAlert('danger', response.message, '#alertEditNamePass');
                 }
             },
             error: function(xhr, status, error) {
@@ -134,9 +134,14 @@ $(document).ready(function() {
                 console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                 $('#confirmBtn').show();
                 $('#loadEditNamePassBtn').hide();
-                showAlert('An error occurred while processing your request.', 'danger');
+                showAlert('danger', message, '#alertEditNamePass');
             }
         });
     });

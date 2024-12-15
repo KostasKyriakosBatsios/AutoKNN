@@ -93,7 +93,7 @@ $(document).ready(function() {
                 console.log('Status:', status);
 
                 // Display specific error message from the server response
-                const response = xhr.responseJSON;
+                const response = JSON.parse(xhr.responseText);
                 const message = response && response.message ? response.message : 'An unexpected error occurred.';
                 
                 showAlert('danger', message, '#alertDatasets');
@@ -198,7 +198,7 @@ $(document).ready(function() {
         // API call for uploading a dataset
         $.ajax({
             url: '../server/php/api/upload_dataset.php',
-            type: 'POST',
+            method: 'POST',
             data: formData,
             processData: false,
             contentType: false,
@@ -342,7 +342,7 @@ $(document).ready(function() {
                     $('#loadDatasetBtn').hide();
 
                     // Display specific error message from the server response
-                    const response = xhr.responseJSON;
+                    const response = JSON.parse(xhr.responseText);
                     const message = response && response.message ? response.message : 'An unexpected error occurred.';
 
                     showAlert('danger', message, '#alertPreview');
@@ -779,7 +779,7 @@ $(document).ready(function() {
                 console.log('Status:', status);
 
                 // Display specific error message from the server response
-                const response = xhr.responseJSON;
+                const response = JSON.parse(xhr.responseText);
                 const message = response && response.message ? response.message : 'An unexpected error occurred.';
 
                 showAlert('danger', message, '#alertBuildModel');

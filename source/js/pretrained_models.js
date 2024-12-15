@@ -80,6 +80,11 @@ $(document).ready(function() {
                 console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
+
+                // Display specific error message from the server response
+                const response = JSON.parse(xhr.responseText);
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                 showAlert('danger', 'Failed to load models.', '#alertModels');
             }
         });
@@ -150,6 +155,11 @@ $(document).ready(function() {
                     console.log('Error:', error);
                     console.log('XHR object:', xhr);
                     console.log('Status:', status);
+
+                    // Display specific error message from the server response
+                    const response = JSON.parse(xhr.responseText);
+                    const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                     showAlert('danger', 'Failed to load model content.', '#alertPreviewParams');
                 },
                 complete: function() {
@@ -303,6 +313,11 @@ $(document).ready(function() {
                 console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
+
+                // Display specific error message from the server response
+                const response = JSON.parse(xhr.responseText);
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                 showAlert('danger', 'Failed to load models.', '#alertUnclassifiedDatasets');
             }
         });
@@ -485,6 +500,10 @@ $(document).ready(function() {
                     // Hide loading button
                     $('#loadUnclassifiedDatasetBtn').hide();
                     
+                    // Display specific error message from the server response
+                    const response = JSON.parse(xhr.responseText);
+                    const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
                     showAlert('danger', 'An error occurred while loading the dataset.', '#alertPreview');
                 }
             });
@@ -683,7 +702,7 @@ $(document).ready(function() {
                             $('#loadClassifyDtBtn').hide();
 
                             // Display specific error message from the server response
-                            const response = xhr.responseJSON;
+                            const response = JSON.parse(xhr.responseText);
                             const message = response && response.message ? response.message : 'An unexpected error occurred.';
 
                             $('#alertClassifyDtModal').html(message);

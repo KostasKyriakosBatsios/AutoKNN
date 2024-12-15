@@ -81,7 +81,12 @@ $(document).ready(function() {
                 console.log('Status:', status);
                 $('#loadRegisterBtn').hide();
                 $('#registerBtn').show();
-                showAlert('danger', 'An error occurred. Please try again.', '#alertRegister');
+
+                // Display specific error message from the server response
+                const response = xhr.responseJSON;
+                const message = response && response.message ? response.message : 'An unexpected error occurred.';
+
+                showAlert('danger', message, '#alertRegister');
             }
         });
     });    
@@ -99,7 +104,7 @@ $(document).ready(function() {
                email: email
            },
            method: 'GET',
-           success: function(response) {
+           success: function() {
                 $('#loadResendBtn').hide();
                 $('#resendBtn').show();
                 showAlert('success', 'Verification email resent successfully', '#alertRegister');
@@ -114,10 +119,9 @@ $(document).ready(function() {
                 $('#resendBtn').show();
 
                 // Display specific error message from the server response
-                const response = xhr.responseJSON;
+                const response = JSON.parse(xhr.responseText);
                 const message = response && response.message ? response.message : 'An unexpected error occurred.';
 
-                showAlert('danger', message, '#alertRegister');
                 showAlert('danger', message, '#alertResend');
            }
         });
