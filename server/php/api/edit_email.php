@@ -11,7 +11,7 @@
         exit;
     }
    
-    // Parse the JSON request
+    // Retrieve the POST data
     $data = json_decode(file_get_contents("php://input"), true);
    
     // Validate required parameters

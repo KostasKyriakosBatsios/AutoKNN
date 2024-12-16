@@ -48,7 +48,7 @@
 
     if (file_exists($filePath)) {
         if (unlink($filePath)) {
-            echo json_encode(["status" => "success", "message" => "'" . ucfirst($file) . "' dataset deleted successfully"]);
+            echo json_encode(["status" => "success", "message" => "'" . $file . "' dataset deleted successfully"]);
         } else {
             http_response_code(500);
             echo json_encode(["status" => "danger", "message" => "Failed to delete the " . $file . " dataset"]);

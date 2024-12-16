@@ -3,6 +3,8 @@
     
     require_once "../db_connection.php";
 
+    header('Content-Type: application/json');
+
     if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
         http_response_code(405);
         echo json_encode(["status" => "danger", "message" => "Only GET requests are allowed"]);
@@ -63,8 +65,6 @@
     // Close database connection
     $mysqli->close();
 
-    // Return datasets as JSON
-    header('Content-Type: application/json');
     echo json_encode([
         "status" => "success", 
         "unclassifiedDatasets" => $unclassifiedDatasets

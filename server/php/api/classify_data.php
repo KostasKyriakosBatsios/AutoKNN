@@ -151,12 +151,9 @@
     
     // Send the results back
     echo json_encode([
-        "message" => "Algorithm is executing",
-        "file" => $file,
-        "model" => $model,
+        "message" => "Classification completed successfully",
         "results" => $results,
         "classified_file" => $savedResultsFilePath,
-        "command" => $pythonCmd,
         "return_code" => $return
     ]);
 ?>

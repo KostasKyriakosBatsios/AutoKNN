@@ -85,7 +85,7 @@ $(document).ready(function() {
                 const response = JSON.parse(xhr.responseText);
                 const message = response && response.message ? response.message : 'An unexpected error occurred.';
 
-                showAlert('danger', 'Failed to load models.', '#alertModels');
+                showAlert('danger', message, '#alertModels');
             }
         });
     }
@@ -252,6 +252,8 @@ $(document).ready(function() {
                 $('#alertPreview').html('');
                 $('#parametersSelected').hide();
                 $('#dtUnclassified').hide();
+                $('#tableUnclassifiedDt').hide();
+                $('#classifiedDt').hide();
                 
                 showAlert('success', response.message, '#alertDelModal');
                 loadModels();
@@ -410,6 +412,8 @@ $(document).ready(function() {
                 $('#uploadUnclassifiedBtn').show();
                 $('#loadUploadingUnclassifiedDatasetBtn').hide();
                 $('#loadUploadUnclassifiedDatasetBtn').hide();
+                $('#tableUnclassifiedDt').hide();
+                $('#classifiedDt').hide();
                 showAlert('success', response.message, '#alertUploadUnclassifiedModal');
                 loadUnclassifiedDatasets();
             },
@@ -613,6 +617,8 @@ $(document).ready(function() {
                 $('#delUnclassifiedBtn').prop('disabled', true);
                 $('#dnloadUnclassifiedBtn').prop('disabled', true)
                 $('#alertPreview').html('');
+                $('#tableUnclassifiedDt').hide();
+                $('#classifiedDt').hide();
                 
                 showAlert('success', response.message, '#alertDelUnclassifiedModal');
                 loadUnclassifiedDatasets();

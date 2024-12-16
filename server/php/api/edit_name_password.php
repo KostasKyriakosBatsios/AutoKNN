@@ -12,18 +12,21 @@
         exit;
     }
     
-    if (!isset($_POST['token']) || !isset($_POST['first_name']) || !isset($_POST['last_name']) || !isset($_POST['current_password']) || !isset($_POST['new_password']) || !isset($_POST['confirm_password'])) {
+    // Retrieve the POST data
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    if (!isset($data['token']) || !isset($data['first_name']) || !isset($data['last_name']) || !isset($data['current_password']) || !isset($data['new_password']) || !isset($data['confirm_password'])) {
         http_response_code(400);
         echo json_encode(["status" => "danger", "message" => "Missing required parameters"]);
         exit;
     }
 
-    $token = $_POST['token'];
-    $firstName = $_POST['first_name'] ?? null;
-    $lastName = $_POST['last_name'] ?? null;
-    $currentPassword = $_POST['current_password'] ?? null;
-    $newPassword = $_POST['new_password'] ?? null;
-    $confirmPassword = $_POST['confirm_password'] ?? null;
+    $token = $data['token'];
+    $firstName = $data['first_name'] ?? null;
+    $lastName = $data['last_name'] ?? null;
+    $currentPassword = $data['current_password'] ?? null;
+    $newPassword = $data['new_password'] ?? null;
+    $confirmPassword = $data['confirm_password'] ?? null;
 
     // Fetch user details based on token
     $sql = "SELECT id, fname, lname, pass FROM users WHERE token = ?";
