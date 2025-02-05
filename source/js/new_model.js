@@ -895,7 +895,7 @@ $(document).ready(function() {
             success: function() {
                 $('#saveModelBtn').show();
                 $('#loadSaveModelBtn').hide();
-                showAlert('success', 'Model saved successfully.', '#alertEvaluation');
+                showAlert('success', 'Model saved successfully. To use the model, go to the Prertrained Models page (Services -> Pretrained Models).', '#alertEvaluation');
             },
             error: function(error, xhr, status) {
                 console.log('Error:', error);
