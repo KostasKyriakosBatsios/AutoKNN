@@ -18,8 +18,8 @@
     // Validate required parameters
     if (!isset($data["fname"]) || !isset($data["lname"]) || !isset($data["email"]) || !isset($data["password"]) || !isset($data["confirmPassword"])) {
         header("HTTP/1.1 400 Bad Request");
-       echo json_encode(["status" => "danger", "message" => "Missing required parameters"]);
-       exit;
+        echo json_encode(["status" => "danger", "message" => "Missing required parameters"]);
+        exit;
     }
 
     // Sanitize and validate inputs
