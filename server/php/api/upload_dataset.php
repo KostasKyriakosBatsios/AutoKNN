@@ -10,7 +10,7 @@
         exit;
     }
 
-    if (!isset($_FILES['file']) || !isset($_POST['folder']) || !isset($_POST['token']) || !isset($_POST['allowPublic'])) {
+    if (!isset($_FILES['file']) || !isset($_POST['folder']) || !isset($_POST['token'])) {
         http_response_code(400);
         echo json_encode(["status" => "danger", "message" => "Missing required parameters"]);
         exit;
@@ -18,7 +18,6 @@
 
     $token = $_POST['token'];
     $folder = $_POST['folder'];
-    $allowPublic = intval($_POST['allowPublic']);
     $file = $_FILES['file'];
 
     // Query to find the user based on the token

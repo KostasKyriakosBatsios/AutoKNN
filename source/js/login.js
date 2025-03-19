@@ -39,7 +39,7 @@ $(document).ready(function() {
                         localStorage.setItem('email', email);
                         localStorage.setItem('fname', response.fname);
                         localStorage.setItem('lname', response.lname);
-                        localStorage.setItem('allowPublic', response.allowPublic)
+                        localStorage.setItem('allowPublic', response.allowPublic);
 
                         // Redirect to home page
                         window.location.href = '../index.html';

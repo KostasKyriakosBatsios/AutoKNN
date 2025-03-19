@@ -193,7 +193,7 @@ $(document).ready(function() {
         formData.append('file', fileInput);
         formData.append('folder', folder);
         formData.append('token', token);
-        formData.append('allowPublic', allowPublic);
+        // formData.append('allowPublic', allowPublic);
 
         // API call for uploading a dataset
         $.ajax({

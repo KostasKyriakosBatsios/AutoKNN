@@ -51,8 +51,6 @@ y = dataset[target].values
 # Perform train test split (70% train, 30% test)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-num_classes = len(set(y_train))
-
 # Check if stratified sampling is needed
 if stratified_sampling:
     # Perform stratified sampling on the training set
