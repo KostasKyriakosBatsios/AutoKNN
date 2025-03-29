@@ -5,9 +5,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 # k Nearest Neighbor algorithm (kNN)
-def knn(k_value, p_value, distance_value):
+def knn(k_value, p_value, distance_value, stratified_sampling):
     # Load dataset
-    dataset = pd.read_csv('server/python/public/normalized/iris_normalized.csv')
+    dataset = pd.read_csv('server/python/public/datasets/letter.csv')
 
     # Split the features and target variables
     X = dataset.iloc[:, :-1].values # Features (attributes), basically all rows and all columns, except the last column
@@ -25,12 +25,10 @@ def knn(k_value, p_value, distance_value):
     # Step 2: Perform train test split (70% train, 30% set)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-    print(f"X_train: {len(X_train)}, X_test: {len(X_test)}, y_train: {y_train}, y_test: {y_test}")
-
-    # Check if at least one of the k and distance is "auto" by the user
-    if isinstance(k_value, range) or isinstance(distance_value, list):
+    # Check if the user chose to perform stratified sampling
+    if stratified_sampling is True:
         # Perform stratified sampling on the 70% of the training set to get a number of samples randomized (max samples: near 70% training set)
-        X_sampled, _, y_sampled, _ = train_test_split(X_train, y_train, train_size=8, random_state=42, stratify=y_train)
+        X_sampled, _, y_sampled, _ = train_test_split(X_train, y_train, train_size=1000, random_state=42, stratify=y_train)
         
         # Check if k is "auto"
         if isinstance(k_value, range):
@@ -204,61 +202,66 @@ def knn(k_value, p_value, distance_value):
                         best_recall = recall
                         best_f1 = f1
 
-    # None of them is "auto" by the user
+    # The user did not choose to perform stratified sampling
     else:
-        # Check if distance is "minkowski"
-        if distance_value == 'minkowski':
-            for p in p_value:
-                # kNN classifier
-                clf = KNeighborsClassifier(n_neighbors=k_value, p=p, metric=distance_value)
+        if isinstance(k_value, range):
+            for k in k_value:
+                # Check if distance is "auto"
+                if isinstance(distance_value, list):
+                    for distance in distance_value:
+                        # Check if distance is "minkowski"
+                        if distance == 'minkowski':
+                            for p in p_value:
+                                # kNN classifier
+                                clf = KNeighborsClassifier(n_neighbors=k, p=p, metric=distance)
 
-                # Fit classifier on train data
-                clf.fit(X_train, y_train)
+                                # Fit classifier on train data
+                                clf.fit(X_train, y_train)
 
-                # Make predictions on test data
-                y_pred = clf.predict(X_test)
+                                # Make predictions on test data
+                                y_pred = clf.predict(X_test)
 
-                accuracy = accuracy_score(y_test, y_pred)
-                precision = precision_score(y_test, y_pred, average='weighted')
-                recall = recall_score(y_test, y_pred, average='weighted')
-                f1 = f1_score(y_test, y_pred, average='weighted')
+                                accuracy = accuracy_score(y_test, y_pred)
+                                precision = precision_score(y_test, y_pred, average='weighted')
+                                recall = recall_score(y_test, y_pred, average='weighted')
+                                f1 = f1_score(y_test, y_pred, average='weighted')
 
-                print(f"k={k_value}, Distance={distance_value}, p={p}, Accuracy={accuracy}, Precision={precision}, Recall={recall}, F1-score={f1}")
+                                print(f"k={k}, Distance={distance}, p={p}, Accuracy={accuracy}, Precision={precision}, Recall={recall}, F1-score={f1}")
 
-                if accuracy > max_accuracy:
-                    max_accuracy = accuracy
-                    best_k = k_value
-                    best_p = p
-                    best_distance = distance_value
-                    best_precision = precision
-                    best_recall = recall
-                    best_f1 = f1
-        
-        # distance is not "minkowski"
-        else:
-            # kNN classifier
-            clf = KNeighborsClassifier(n_neighbors=k_value, metric=distance_value)
+                                if accuracy > max_accuracy:
+                                    max_accuracy = accuracy
+                                    best_k = k
+                                    best_p = p
+                                    best_distance = distance
+                                    best_precision = precision
+                                    best_recall = recall
+                                    best_f1 = f1
 
-            # Fit classifier on train data
-            clf.fit(X_train, y_train)
+                        # distance is not "minkowski"
+                        else:
+                            # kNN classifier
+                            clf = KNeighborsClassifier(n_neighbors=k, metric=distance)
 
-            # Make predictions on test data
-            y_pred = clf.predict(X_test)
+                            # Fit classifier on train data
+                            clf.fit(X_train, y_train)
 
-            accuracy = accuracy_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred, average='weighted')
-            recall = recall_score(y_test, y_pred, average='weighted')
-            f1 = f1_score(y_test, y_pred, average='weighted')
+                            # Make predictions on test data
+                            y_pred = clf.predict(X_test)
 
-            print(f"k={k_value}, Distance={distance_value}, Accuracy={accuracy}, Precision={precision}, Recall={recall}, F1-score={f1}")
+                            accuracy = accuracy_score(y_test, y_pred)
+                            precision = precision_score(y_test, y_pred, average='weighted')
+                            recall = recall_score(y_test, y_pred, average='weighted')
+                            f1 = f1_score(y_test, y_pred, average='weighted')
 
-            if accuracy > max_accuracy:
-                max_accuracy = accuracy
-                best_k = k_value
-                best_distance = distance_value
-                best_precision = precision
-                best_recall = recall
-                best_f1 = f1
+                            print(f"k={k}, Distance={distance}, Accuracy={accuracy}, Precision={precision}, Recall={recall}, F1-score={f1}")
+
+                            if accuracy > max_accuracy:
+                                max_accuracy = accuracy
+                                best_k = k
+                                best_distance = distance
+                                best_precision = precision
+                                best_recall = recall
+                                best_f1 = f1
 
     print(f"Best execution: k={best_k}, Distance={best_distance}, p={best_p}, Accuracy={max_accuracy}, Precision={best_precision}, Recall={best_recall}, F1-score={best_f1}")
     return best_k, best_distance, best_p, max_accuracy, best_precision, best_recall, best_f1
@@ -302,12 +305,24 @@ if __name__ == "__main__":
     # Check if the distance is the "minkowski" metric or the list of all the distances (it means that the user chose "auto")
     if distance == "minkowski" or isinstance(distance, list):
         # Change the value of p, if it gets inside this if
-        p = range(1, 5)
+        p = [3, 4]
     
+    # Ask the user for the stratified sampling option
+    while True:
+        strat = input("Do you want to perform stratified sampling? ")
+
+        # Check if distance is either "euclidean", "manhattan", "chebyshev", or "minkowski"
+        if strat.lower() in ['yes', 'y']:
+            strat = True
+            break
+        else:
+            strat = False
+            break
+
     # Execution time (specifically CPU time)
     start_time = psutil.Process().cpu_times().user
 
-    best_k, best_distance, best_p, max_accuracy, best_precision, best_recall, best_f1 = knn(k, p, distance)
+    best_k, best_distance, best_p, max_accuracy, best_precision, best_recall, best_f1 = knn(k, p, distance, strat)
 
     end_time = psutil.Process().cpu_times().user
 
