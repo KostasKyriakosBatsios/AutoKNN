@@ -6,7 +6,7 @@
     require "credentials_config.php";
     
     function send_email($recipient_email, $recipient_name, $subject, $body, $alt_body) {
-        global $username, $password;
+        require "credentials_config.php";
 
         $mail = new PHPMailer(true);
         try {
