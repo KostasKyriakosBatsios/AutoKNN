@@ -47,6 +47,18 @@
         exit;
     }
 
+    // Validate password format
+    $passlength = strlen($password);
+    $passuppercase = preg_match('@[A-Z]@', $password);
+    $passlowercase = preg_match('@[a-z]@', $password);
+    $passnumber = preg_match('@[0-9]@', $password);
+    
+    // Check if password meets requirements
+    if ($passlength < 6 || !$passuppercase || !$passlowercase || !$passnumber) {
+        echo json_encode(["status" => "warning", "message" => "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."]);
+        exit;
+    }
+
     // Check if email already exists
     $sql = "SELECT id FROM users WHERE email = ?";
     $stmt = $mysqli->prepare($sql);

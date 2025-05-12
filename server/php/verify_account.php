@@ -21,6 +21,24 @@
     if ($email) {
         http_response_code(400);
         echo json_encode(['status'=> 'danger', 'message' => 'Verification key has expired', 'email' => $email]);
+
+        // Delete user's directories
+        $hash_user = md5($email);
+        $userDir = "../../python/private/$hash_user";
+        
+        // Delete the user's directory
+        if (!deleteDirectory($userDir)) {
+            echo json_encode(["status" => "danger", "message" => "Failed to delete user directories"]);
+            $stmt->close();
+            exit();
+        }
+
+        // Delete user from database, so the user can register with this email in the future
+        $sql = "DELETE FROM users WHERE email = ?";
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+
         exit;
     }
 
