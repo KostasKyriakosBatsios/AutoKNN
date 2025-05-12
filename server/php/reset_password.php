@@ -32,12 +32,6 @@
         exit;
     }
 
-    // Check for uppercase, lowercase, number, special character and the legth of the password
-    if (!preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[^A-Za-z0-9]/', $password) || strlen($password) < 8) {
-        echo json_encode(['status' => 'warning', 'message' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']);
-        exit;
-    }
-
     // Check if the password and confirm password are empty
     if (empty($password) || empty($confirmPassword)) {
         echo json_encode(['status' => 'warning', 'message' => 'All fields are required.']);
@@ -47,6 +41,18 @@
     // Check if the passwords match
     if ($password !== $confirmPassword) {
         echo json_encode(['status' => 'warning', 'message' => 'Passwords do not match.']);
+        exit;
+    }
+
+    // Validate password format
+    $passlength = strlen($password);
+    $passuppercase = preg_match('@[A-Z]@', $password);
+    $passlowercase = preg_match('@[a-z]@', $password);
+    $passnumber = preg_match('@[0-9]@', $password);
+    
+    // Check if password meets requirements
+    if ($passlength < 6 || !$passuppercase || !$passlowercase || !$passnumber) {
+        echo json_encode(["status" => "warning", "message" => "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."]);
         exit;
     }
 
