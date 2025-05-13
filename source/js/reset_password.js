@@ -47,13 +47,14 @@ $(document).ready(function() {
                 console.log('Error:', error);
                 console.log('XHR object:', xhr);
                 console.log('Status:', status);
-                
+
                 // Display specific error message from the server response
                 const response = xhr.responseJSON;
                 const message = response && response.message ? response.message : 'An unexpected error occurred.';
 
                 showAlert('danger', message, '#alertResetPassword');
                 $('#loadConfirmBtn').hide();
+                $('#confirmBtn').show();
                 if (message === 'Invalid verification key') {
                     $('#confirmBtn').show().prop('disabled', true);
                     showAlert('warning', 'To get a new verification key, please click on the forgot password link below the confirm button.', '#alertResend');
