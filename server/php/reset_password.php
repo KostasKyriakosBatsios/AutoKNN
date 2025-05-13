@@ -5,7 +5,7 @@
     header('Content-Type: application/json');
    
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        http_response_code(405);
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(["message" => "Only POST requests are allowed"]);
         exit;
     }
@@ -15,7 +15,7 @@
    
     // Validate required parameters
     if (!isset($data['verification_key']) || !isset($data['password']) || !isset($data['confirmPassword'])) {
-        http_response_code(400);
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(["message" => "Missing required parameters"]);
         exit;
     }
@@ -27,19 +27,21 @@
     // Check if the verification key is expired
     $email = checkVerificationKey($verification_key);
     if ($email) {
-        http_response_code(400);
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(['status' => 'danger', 'message' => 'Invalid verification key.']);
         exit;
     }
 
     // Check if the password and confirm password are empty
     if (empty($password) || empty($confirmPassword)) {
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(['status' => 'warning', 'message' => 'All fields are required.']);
         exit;
     }
 
     // Check if the passwords match
     if ($password !== $confirmPassword) {
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(['status' => 'warning', 'message' => 'Passwords do not match.']);
         exit;
     }
@@ -52,6 +54,7 @@
     
     // Check if password meets requirements
     if ($passlength < 6 || !$passuppercase || !$passlowercase || !$passnumber) {
+        header("HTTP/1.1 400 Bad Request");
         echo json_encode(["status" => "warning", "message" => "Password must contain at least 6 characters, in which must contain at least one uppercase letter, one lowercase letter, and one number."]);
         exit;
     }
