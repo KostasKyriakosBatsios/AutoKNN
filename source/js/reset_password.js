@@ -25,7 +25,7 @@ $(document).ready(function() {
         $('#loadConfirmBtn').show();
 
         var password = $('#password').val().trim();
-        var confirmPassword = $('#password').val().trim();
+        var confirmPassword = $('#confirmPassword').val().trim();
 
         // AJAX call to reset the password
         $.ajax({
