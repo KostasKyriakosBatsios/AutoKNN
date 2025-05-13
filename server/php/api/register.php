@@ -55,7 +55,7 @@
     
     // Check if password meets requirements
     if ($passlength < 6 || !$passuppercase || !$passlowercase || !$passnumber) {
-        echo json_encode(["status" => "warning", "message" => "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."]);
+        echo json_encode(["status" => "warning", "message" => "Password must contain at least 6 characters, in which must contain at least one uppercase letter, one lowercase letter, and one number."]);
         exit;
     }
 
