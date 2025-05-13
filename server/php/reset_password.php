@@ -53,9 +53,9 @@
     $passnumber = preg_match('@[0-9]@', $password);
     
     // Check if password meets requirements
-    if ($passlength < 6 || !$passuppercase || !$passlowercase || !$passnumber) {
+    if ($passlength < 8 || !$passuppercase || !$passlowercase || !$passnumber) {
         header("HTTP/1.1 400 Bad Request");
-        echo json_encode(["status" => "warning", "message" => "Password must contain at least 6 characters, in which must contain at least one uppercase letter, one lowercase letter, and one number."]);
+        echo json_encode(["status" => "warning", "message" => "Password must contain at least 8 characters, in which must contain at least one uppercase letter, one lowercase letter, and one number."]);
         exit;
     }
 
