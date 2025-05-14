@@ -305,10 +305,6 @@
                 <h1>Insert parameters</h1>
                 <div class="sub-box">
                     <h2>Features</h2>
-                    <!-- Info -->
-                    <div class="margin-top">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="Only numerical columns are available, with no missing values">Select feaures for Classification: </button>
-                    </div>
                     <!-- Select all available features -->
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="selectAllFeatures">
@@ -316,26 +312,30 @@
                     </div>
                     <!-- Individual features -->
                     <form action="#" id="individualFeatures"></form>
+                    <!-- Info -->
+                    <div class="margin-top">
+                        <span data-bs-toggle="tooltip" title="Only numerical columns are available, with no missing values">
+                            <i><ion-icon name="information-circle-outline"></ion-icon></i> Select feaures for Classification (hover here for more info) 
+                        </span>
+                    </div>
                 </div>
                 <div class="sub-box">
                     <h2>Class field</h2>
-                    <!-- Info -->
-                    <div class="margin-top">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="Only columns are available that have no missing values">Select the class field: </button>
-                    </div>
                     <!-- Select class -->
                     <select id="selectClass" class="form-select" aria-label="Choose an available class"></select>
+                    <!-- Info -->
+                    <div class="margin-top">
+                        <span data-bs-toggle="tooltip" title="Only columns are available that have no missing values">
+                            <i><ion-icon name="information-circle-outline"></ion-icon></i> Select the class field (hover here for more info) 
+                        </span>
+                    </div>
                 </div>
                 <div class="sub-box">
                     <h2>Parameters' form</h2>
                     <!-- Form for k, distance -->
                     <form action="#">
                         <div class="sub-box" id="parametersSpecific">
-                            <!-- Info -->
-                            <div class="margin-top">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="Must select certain values for k, metric distance and p (if needed)">Select values for the parameters of kNN and train test method: </button>
-                            </div>
-                            <p>Do you want k to be automated?</p>
+                            <p>Do you want k to be determined automatically?</p>
                             <!-- k (automated value) -->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="checkAutoK">
@@ -359,18 +359,26 @@
                                     <option value="minkowski4">Minkowski, with p=4</option>
                                 </select>  
                             </div>
+                            <!-- Info -->
+                            <div class="margin-top">
+                                <span data-bs-toggle="tooltip" title="Must select certain values for k, metric distance and p (if needed)">
+                                    <i><ion-icon name="information-circle-outline"></ion-icon></i> Select values for the parameters of kNN and train test method (hover here for more info)
+                                </span>
+                            </div>
                         </div>
                         <!-- Stratified sampling option -->
                         <div class="sub-box" id="stratify">
-                            <!-- Info -->
-                            <div class="margin-top">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" title="An option, when the selected dataset has at least 1000 data. If selected, it'll perform stratified sampling for 1000 samples of the training set. It helps kNN to perform better and faster.">Stratified Sampling option (recommended): </button>
-                            </div>
                             <p>Do you want to perform stratified sampling?</p>
                             <!-- Stratified sampling option -->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="checkStratifiedSampling">
                                 <label class="form-check-label" for="checkStratifiedSampling">Yes, I do</label>
+                            </div>
+                            <!-- Info -->
+                            <div class="margin-top">
+                                <span data-bs-toggle="tooltip" title="An option, when the selected dataset has at least 1000 data. If selected, it'll perform stratified sampling for 1000 samples of the training set. It helps kNN to perform better and faster.">
+                                    <i><ion-icon name="information-circle-outline"></ion-icon></i> Stratified Sampling option (hover here for more info) 
+                                </span>
                             </div>
                         </div>
                         <div class="d-grid">

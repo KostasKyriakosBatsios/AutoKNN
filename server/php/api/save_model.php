@@ -107,7 +107,9 @@
     // Validate the model name (only allow letters, numbers, underscores, and hyphens)
     if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $model_name)) {
         http_response_code(400);
-        echo json_encode(["message" => "Invalid model name. It must start with a letter and can only contain letters, numbers, underscores, and hyphens."]);
+        echo json_encode([
+            "message" => "Invalid model name. It must start with a letter and contain only letters, numbers, underscores (_), or hyphens (-), with no spaces."
+        ]);
         exit;
     }
     
