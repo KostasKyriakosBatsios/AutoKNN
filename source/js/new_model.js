@@ -862,7 +862,7 @@ $(document).ready(function() {
         var modelName = $('#modelName').val().trim();
     
         // Ensure the model name contains at least one letter and optionally a number
-        if (!modelName || !/^(?=.*[a-zA-Z])[a-zA-Z0-9]*$/.test(modelName)) {
+        if (!modelName || !/^(?=.*[a-zA-Z])[a-zA-Z0-9_]*$/.test(modelName)) {
             showAlert('danger', 'Please enter a valid model name containing at least one letter, and optionally a number.', '#alertEvaluation');
             $('#saveModelBtn').show();
             $('#loadSaveModelBtn').hide();
