@@ -108,7 +108,7 @@ $(document).ready(function() {
         $.ajax({
             url: '../server/php/api/edit_name_password.php',
             type: 'POST',
-            data: formData,
+            data: JSON.stringify(formData),
             dataType: 'json',
             success: function(response) {
                 $('#confirmBtn').show();
